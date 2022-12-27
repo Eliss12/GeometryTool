@@ -3,7 +3,7 @@
 const double CHECK_VALUE1 = -0.0000001;
 const double CHECK_VALUE2 = 0.0000001;
 
-bool doesPontLieOnLine(double x, double y, double a, double b, double c)
+bool doesPointLieOnLine(double x, double y, double a, double b, double c)
 {
     double check = a * x + b * y + c;
     if(check > CHECK_VALUE1 && check < CHECK_VALUE2)
@@ -12,16 +12,16 @@ bool doesPontLieOnLine(double x, double y, double a, double b, double c)
     }
     else { return false; }
 }
-void printLineParallelToLineThroughPoint(double x, double y, double a, double b, double c)
+
+void printLine(double a, double b, double c)
 {
-    double newC = a * (-x) + b * (-y);
-    if(a == -1.0) {
+    if (a == -1.0) {
         std::cout << "-x";
     }
     else if (a == 1.0) {
         std::cout << "x";
     }
-    else if (a!=0.0) { std::cout << a << "x"; }
+    else if (a != 0.0) { std::cout << a << "x"; }
 
     if (b == -1.0) {
         std::cout << "-y";
@@ -33,12 +33,17 @@ void printLineParallelToLineThroughPoint(double x, double y, double a, double b,
         std::cout << "+" << b << "y";
     }
     else { std::cout << b << "y"; }
-    
-    if (newC > CHECK_VALUE2) {
-        std::cout << "+" << newC;
+
+    if (c > CHECK_VALUE2) {
+        std::cout << "+" << c;
     }
-    else if(newC < CHECK_VALUE1) { std::cout << newC; }
+    else if (c < CHECK_VALUE1) { std::cout << c; }
     std::cout << "=0";
+}
+void printLineParallelToLineThroughPoint(double x, double y, double a, double b, double c)
+{
+    double newC = a * (-x) + b * (-y);
+    printLine(a, b, newC);
 }
 
 void printPerpendicularLineToLine(double x, double y, double a, double b, double c)
@@ -46,30 +51,7 @@ void printPerpendicularLineToLine(double x, double y, double a, double b, double
     double newA = -b;
     double newB = a;
     double newC = -a * y + b * x;
-    if (newA == -1.0) {
-        std::cout << "-x";
-    }
-    else if (newA == 1.0) {
-        std::cout << "x";
-    }
-    else if (newA != 0.0) { std::cout << newA << "x"; }
-
-    if (newB == -1.0) {
-        std::cout << "-y";
-    }
-    else if (newB == 1.0) {
-        std::cout << "+y";
-    }
-    else if (newB > CHECK_VALUE2 && newB != 1.0) {
-        std::cout << "+" << newB << "y";
-    }
-    else { std::cout << newB << "y"; }
-
-    if (newC > CHECK_VALUE2) {
-        std::cout << "+" << newC;
-    }
-    else if(newC < CHECK_VALUE1) { std::cout << newC; }
-    std::cout << "=0";
+    printLine(newA, newB, newC);
 }
 
 void findCommonPoint(double a1, double b1, double c1, double a2, double b2, double c2)
@@ -89,6 +71,20 @@ void findCommonPoint(double a1, double b1, double c1, double a2, double b2, doub
         std::cout << "(" << x << ";" << y << ")";
     }
 }
+
+void findLineThroughTwoPoints(double x1, double x2, double y1, double y2, double* a, double* b, double* c)
+{
+    *a = y1 - y2;
+    *b = x2 - x1;
+    *c = (x1 - x2) * y1 + (y2 - y1) * x1;
+}
+
+void findMiddle(double x1, double x2, double y1, double y2, double* newX, double* newY)
+{
+    *newX = x2 - x1;
+    *newY = y2 - y1;
+}
+
 int main()
 {
     /*double x, y, z, a, b, c = 0.0;
@@ -103,7 +99,15 @@ int main()
     std::cin >> a >> b >> c;
     findCommonPoint(x, y, z, a, b, c);*/
 
-    double x, y, a, b, c = 0.0;
+    /*double x, y, a, b, c = 0.0;
     std::cin >> x >> y >> a >> b >> c;
-    printPerpendicularLineToLine(x, y, a, b, c);
+    std::cout<<doesPointLieOnLine(x, y, a, b, c);*/
+    double x1, x2, x3, y1, y2, y3, newX, newY, a, b, c = 0.0;
+    std::cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+    findMiddle(x1, x2, y1, y2, &newX, &newY);
+    findLineThroughTwoPoints(newX, x3, newY, y3, &a, &b, &c); //mediana
+    printLine(a, b, c);
+    /*findLineThroughTwoPoints(x2, x3, y2, y3, &a,&b,&c);  //heigth
+    
+    printPerpendicularLineToLine(x1, y1, a, b, c);*/
 }
