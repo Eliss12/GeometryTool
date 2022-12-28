@@ -85,6 +85,63 @@ void findMiddle(double x1, double x2, double y1, double y2, double* newX, double
     *newY = y2 - y1;
 }
 
+double pow(double number, int power)
+{
+    double result = 1;
+    for (int i = 0; i < power; i++)
+    {
+        result *= number;
+    }
+    return result;
+}
+
+bool pointLiesOnParabola(double x, double y, double a, double b, double c)
+{
+    if (a * pow(x, 2) + b * x + c == 0)
+    {
+        return true;
+    }
+    else { return false; }
+}
+
+void findTangentThroughPointOnParabola(double x, double y, double a, double b, double c)
+{
+    double newA = 2 * a * x + b;
+    double newB = -1;
+    double newC = -a * pow(x, 2) + c;
+    printLine(newA, newB, newC);
+}
+
+void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
+{
+    double discriminant = pow(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
+    if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }
+    else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
+    {
+        double x = (-a2 - b1 * b2) / 2 * a1 * b2;
+        double y = a1 * pow(x, 2) + b1 * x + c1;
+        std::cout << "(" << x << ";" << y << ")";
+    }
+    else
+    {
+        double x1 = (-a2 - b1 * b2 + sqrt(discriminant)) / 2 * a1 * b2;
+        double x2 = (-a2 - b1 * b2 - sqrt(discriminant)) / 2 * a1 * b2;
+        double y1 = a1 * pow(x1, 2) + b1 * x1 + c1;
+        double y2 = a1 * pow(x2, 2) + b1 * x2 + c1;
+        std::cout << "(" << x1 << ";" << y1 << ")" << " " << "(" << x2 << ";" << y2 << ")";
+    }
+
+}
+
+bool areTwoLinesParallel(double a1, double b1, double a2, double b2)
+{
+    double check = a1 * b2 - a2 * b1;
+    if (check > CHECK_VALUE1 && check < CHECK_VALUE2)
+    {
+        return true;
+    }
+    else { return false; }
+}
 int main()
 {
     /*double x, y, z, a, b, c = 0.0;
@@ -102,12 +159,21 @@ int main()
     /*double x, y, a, b, c = 0.0;
     std::cin >> x >> y >> a >> b >> c;
     std::cout<<doesPointLieOnLine(x, y, a, b, c);*/
-    double x1, x2, x3, y1, y2, y3, newX, newY, a, b, c = 0.0;
-    std::cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
-    findMiddle(x1, x2, y1, y2, &newX, &newY);
-    findLineThroughTwoPoints(newX, x3, newY, y3, &a, &b, &c); //mediana
-    printLine(a, b, c);
+    //double x1, x2, x3, y1, y2, y3, newX, newY, a, b, c = 0.0;
+    //std::cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+    //findMiddle(x1, x2, y1, y2, &newX, &newY);
+    //findLineThroughTwoPoints(newX, x3, newY, y3, &a, &b, &c); //mediana
+    //printLine(a, b, c);
     /*findLineThroughTwoPoints(x2, x3, y2, y3, &a,&b,&c);  //heigth
     
     printPerpendicularLineToLine(x1, y1, a, b, c);*/
+
+    /*double x, y, a, b, c = 0.0;
+    std::cin >> x >> y >> a >> b >> c;
+    findTangentThroughPointOnParabola(x, y, a, b, c);*/
+
+    double a1, b1, c1, a2, b2, c2 = 0.0;
+    std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
+    /*findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);*/
+    std::cout<<areTwoLinesParallel(a1, b1, a2, b2);
 }
