@@ -54,7 +54,7 @@ void printPerpendicularLineToLine(double x, double y, double a, double b, double
     printLine(newA, newB, newC);
 }
 
-void findCommonPoint(double a1, double b1, double c1, double a2, double b2, double c2)
+void findCommonPoint(double a1, double b1, double c1, double a2, double b2, double c2, double* x, double* y)
 {
     if(a1 * b2 - a2 * b1 == 0)
     {
@@ -66,9 +66,9 @@ void findCommonPoint(double a1, double b1, double c1, double a2, double b2, doub
     }
     else
     {
-        double y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
-        double x = (-b1 * y - c1) / a1;
-        std::cout << "(" << x << ";" << y << ")";
+        *y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
+        *x = (-b1 * *y - c1) / a1;
+        /*std::cout << "(" << *x << ";" << *y << ")";*/
     }
 }
 
@@ -142,6 +142,78 @@ bool areTwoLinesParallel(double a1, double b1, double a2, double b2)
     }
     else { return false; }
 }
+
+int findDistanceBetweenTwoPoints(double x1, double y1, double x2, double y2)
+{
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
+{
+    int firstCheck = areTwoLinesParallel(a1, b1, a2, b2);
+    int secondCheck = areTwoLinesParallel(a1, b1, a3, b3);
+    int thirdCheck = areTwoLinesParallel(a1, b1, a4, b4);
+    int fourthCheck = areTwoLinesParallel(a2, b2, a3, b3);
+    int fifthCheck = areTwoLinesParallel(a2, b2, a4, b4);
+    int sixthCheck = areTwoLinesParallel(a3, b3, a4, b4);
+    
+    if (firstCheck == 1 || secondCheck == 1 || thirdCheck == 1 || fourthCheck == 1 || fifthCheck == 1 || sixthCheck == 1)
+    {
+        if (firstCheck == 1)
+        {
+            if (sixthCheck == 1)
+            { 
+                double x1, y1, x2, y2, x3, y3 = 0.0;
+                findCommonPoint(a1, b1, c1, a3, b3, c3, &x1, &y1);
+                findCommonPoint(a1, b1, c1, a4, b4, c4, &x2, &y2);
+                findCommonPoint(a2, b2, c2, a4, b4, c4, &x3, &y3);
+                double distance1 = findDistanceBetweenTwoPoints(x1, x2, y1, y2);
+                double distance2 = findDistanceBetweenTwoPoints(x2, x3, y2, y3);
+                if (a1 * a3 + b1 * b3 == 0 && distance1 != distance2) { std::cout << "Rectangle"; }
+                else if (a1 * a3 + b1 * b3 !=0 && distance1 == distance2) { std::cout << "Rhombus"; }
+                else if(a1 * a3 + b1 * b3 == 0 && distance1 == distance2) { std::cout << "Square"; }
+                else { std::cout << "Parallelogram"; }
+            }
+            else { std::cout << "Trapezoid"; }
+        }
+        else if (secondCheck == 1)
+        {
+            if (fifthCheck == 1)
+            {
+                if (a1 * a2 + b1 * b2 == 0) { std::cout << "Rectangle";}
+                double x1, y1, x2, y2, x3, y3 = 0.0;
+                findCommonPoint(a1, b1, c1, a2, b2, c2, &x1, &y1);
+                findCommonPoint(a1, b1, c1, a4, b4, c4, &x2, &y2);
+                findCommonPoint(a3, b3, c3, a4, b4, c4, &x3, &y3);
+                double distance1 = findDistanceBetweenTwoPoints(x1, x2, y1, y2);
+                double distance2 = findDistanceBetweenTwoPoints(x2, x3, y2, y3);
+
+                if (distance1 == distance2) { std::cout << "Rhombus"; }
+                else if (a1 * a2 + b1 * b2 == 0 && distance1 == distance2) {std::cout << "Square";}
+            }
+            else { std::cout << "Trapezoid"; }
+        }
+        else if (thirdCheck == 1)
+        {
+            if (fourthCheck == 1)
+            {
+                if (a1 * a3 + b1 * b3 == 0) { std::cout << "Rectangle"; }
+                double x1, y1, x2, y2, x3, y3 = 0.0;
+                findCommonPoint(a1, b1, c1, a2, b2, c2, &x1, &y1);
+                findCommonPoint(a1, b1, c1, a3, b3, c3, &x2, &y2);
+                findCommonPoint(a3, b3, c3, a4, b4, c4, &x3, &y3);
+                double distance1 = findDistanceBetweenTwoPoints(x1, x2, y1, y2);
+                double distance2 = findDistanceBetweenTwoPoints(x2, x3, y2, y3);
+
+                if (distance1 == distance2) { std::cout << "Rhombus"; }
+                else if (a1 * a3 + b1 * b3 == 0 && distance1 == distance2) { std::cout << "Square"; }
+            }
+        }
+        else if (sixthCheck == 1 && firstCheck == 0) { std::cout << "Rhombus"; }
+        else if (fifthCheck == 1 && secondCheck == 0) { std::cout << "Rhombus"; }
+        else if (fourthCheck == 1 && thirdCheck == 0) { std::cout << "Rhombus"; }
+    }
+    else { std::cout << "Arbitrary quadrilateral"; }
+}
 int main()
 {
     /*double x, y, z, a, b, c = 0.0;
@@ -172,8 +244,11 @@ int main()
     std::cin >> x >> y >> a >> b >> c;
     findTangentThroughPointOnParabola(x, y, a, b, c);*/
 
-    double a1, b1, c1, a2, b2, c2 = 0.0;
-    std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
-    /*findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);*/
-    std::cout<<areTwoLinesParallel(a1, b1, a2, b2);
+    //double a1, b1, c1, a2, b2, c2 = 0.0;
+    //std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
+    ///*findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);*/
+    //std::cout<<areTwoLinesParallel(a1, b1, a2, b2);
+    double a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4 = 0.0;
+    std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2 >> a3 >> b3 >> c3 >> a4 >> b4 >> c4;
+    checkFig(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
 }
