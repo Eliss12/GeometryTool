@@ -56,20 +56,8 @@ void printPerpendicularLineToLine(double x, double y, double a, double b, double
 
 void findCommonPoint(double a1, double b1, double c1, double a2, double b2, double c2, double* x, double* y)
 {
-    if(a1 * b2 - a2 * b1 == 0)
-    {
-        std::cout << "The lines are parallel";
-    }
-    else if (a1 == a2 && b1 == b2 && c1 == c2)
-    {
-        std::cout << "The lines match";
-    }
-    else
-    {
-        *y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
-        *x = (-b1 * *y - c1) / a1;
-        /*std::cout << "(" << *x << ";" << *y << ")";*/
-    }
+    *y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
+    *x = (-b1 * *y - c1) / a1;
 }
 
 void findLineThroughTwoPoints(double x1, double x2, double y1, double y2, double* a, double* b, double* c)
@@ -97,7 +85,10 @@ double pow(double number, int power)
 
 bool pointLiesOnParabola(double x, double y, double a, double b, double c)
 {
-    if (a * pow(x, 2) + b * x + c == 0)
+    double y1 = a * pow(x, 2) + b * x + c;
+    double difference = y1 - y;
+    double absDifference = difference > 0 ? difference : -difference;
+    if (absDifference < CHECK_VALUE2)
     {
         return true;
     }
@@ -110,6 +101,45 @@ void findTangentThroughPointOnParabola(double x, double y, double a, double b, d
     double newB = -1;
     double newC = -a * pow(x, 2) + c;
     printLine(newA, newB, newC);
+}
+
+void findTangentThroughPointNotOnParabola(double x, double y, double a, double b, double c)
+{
+    double quadraticA = - a;
+    double quadraticB = 2 * a * x;
+    double quadraticC = b * x + c - y;
+    double discriminant = pow(quadraticB, 2) - 4 * quadraticA * quadraticC;
+    
+    if(discriminant < CHECK_VALUE1)
+    {
+        std::cout << "There is not a tangent";
+    }
+    else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
+    {
+        double x1 = -quadraticB / 2 * quadraticA;
+        double newA = 2 * x1 * a + b;
+        double newB = -1;
+        double newC = (2 * x1 * a + b) * (- x1);
+        printLine(newA, newB, newC);
+    }
+    else
+    {
+        double sqrtDiscriminant = sqrt(discriminant);
+        
+        double x1 = (- quadraticB + sqrtDiscriminant) / 2 * quadraticA;
+        double x2 = (- quadraticB - sqrtDiscriminant) / 2 * quadraticA;
+        
+        double newA1 = 2 * a * x1 + b;
+        double newB1 = -1;
+        double newC1 = (2 * x1 * a + b) * (- x1) + a * pow(x1, 2) + b * x1 + c;
+
+        double newA2 = 2 * a * x2 + b;
+        double newB2 = -1;
+        double newC2 = (2 * x2 * a + b) * (- x2) + a * pow(x2, 2) + b * x2 + c;
+        printLine(newA1, newB1, newC1);
+        std::cout << std::endl;
+        printLine(newA2, newB2, newC2);
+    }
 }
 
 void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
@@ -153,6 +183,7 @@ bool isAngleRight(double a1, double b1, double a2, double b2)
     double result = a1 * a2 + b1 * b2;
     return (result > CHECK_VALUE1 && result < CHECK_VALUE2) ? true : false;
 }
+
 bool checkRectangularTrapezoid(double a1, double b1, double a2, double b2, double a3, double b3, double a4, double b4)
 {
     int firstCheck = isAngleRight(a1, b1, a3, b3);
@@ -238,6 +269,40 @@ void checkFig2(double a1, double b1, double c1, double a2, double b2, double c2,
     else { std::cout << "Parallelogram"; }
 }
 
+bool doTwoLinesMatch(double a1, double b1, double c1, double a2, double b2, double c2)
+{
+    if(a1 == a2 && b1 == b2 && c1 == c2)
+    {
+        return true;
+    }
+    else if (a1 == 0 - a2 && b1 == 0 - b2 && c1 == 0 - c2)
+    {
+        return true;
+    }
+    else { return false; }
+}
+
+bool commonPointThreeLines(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
+{
+    double x, y = 0.0;
+    if (areTwoLinesParallel(a1, b1, a2, b2) == 0 && doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 0)
+    {
+        findCommonPoint(a1, b1, c1, a2, b2, c2, &x, &y);
+        double checkThirdLine = a3 * x + b3 * y + c3;
+        double checkFourthLine = a4 * x + b4 * y + c4;
+        if (checkThirdLine < CHECK_VALUE2 && checkThirdLine > CHECK_VALUE1)
+        {
+            return true;
+        }
+        else if (checkFourthLine < CHECK_VALUE2 && checkFourthLine > CHECK_VALUE1)
+        {
+            return true;
+        }
+        else { return false; }
+    }
+    else { return false; }
+}
+
 void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
 {
     int firstCheck = areTwoLinesParallel(a1, b1, a2, b2);
@@ -246,10 +311,18 @@ void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, 
     int fourthCheck = areTwoLinesParallel(a2, b2, a3, b3);
     int fifthCheck = areTwoLinesParallel(a2, b2, a4, b4);
     int sixthCheck = areTwoLinesParallel(a3, b3, a4, b4);
+
+    int firstPoint = commonPointThreeLines(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
+    int secondPoint = commonPointThreeLines(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);
+    int thirdPoint = commonPointThreeLines(a1, b1, c1, a4, b4, c4, a2, b2, c2, a3, b3, c3);
+    int fourthPoint = commonPointThreeLines(a2, b2, c2, a3, b3, c3, a1, b1, c1, a4, b4, c4);
+    int fifthPoint = commonPointThreeLines(a2, b2, c2, a4, b4, c4, a1, b1, c1, a3, b3, c3);
+    int sixthPoint = commonPointThreeLines(a3, b3, c3, a4, b4, c4, a1, b1, c1, a2, b2, c2);
+
     int sum = firstCheck + secondCheck + thirdCheck + fourthCheck + fifthCheck + sixthCheck;
-    
-    if (sum >= 3) { std::cout << "Not a quadrilateral"; }
-    else if (sum == 0) { std::cout << "Arbitrary quadrilateral"; }
+    int sum2 = firstPoint + secondPoint + thirdPoint + fourthPoint + fifthPoint + sixthPoint;
+    if (sum >= 3 || sum2 >= 3) { std::cout << "Not a quadrilateral"; }
+    else if (sum == 0 && sum2 == 0) { std::cout << "Arbitrary quadrilateral"; }
     else
     {
         if (firstCheck == 1)
@@ -313,7 +386,11 @@ int main()
     //std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
     ///*findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);*/
     //std::cout<<areTwoLinesParallel(a1, b1, a2, b2);
-    double a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4 = 0.0;
+
+    /*double a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4 = 0.0;
     std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2 >> a3 >> b3 >> c3 >> a4 >> b4 >> c4;
-    checkFig(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
+    checkFig(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);*/
+    double x, y, a, b, c = 0.0;
+    std::cin >> x >> y >> a >> b >> c;
+    findTangentThroughPointNotOnParabola(x, y, a, b, c);
 }
