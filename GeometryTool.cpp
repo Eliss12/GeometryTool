@@ -163,6 +163,32 @@ bool checkRectangularTrapezoid(double a1, double b1, double a2, double b2, doubl
     return(sum == 2) ? true : false;
 }
 
+bool checkLeg(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
+{
+    double x, y = 0.0;
+    findCommonPoint(a3, b3, c3, a4, b4, c4, &x, &y);
+    if (a1 < CHECK_VALUE1) 
+    { 
+        a1 = 0 - a1;
+        b1 = 0 - b1;
+        c1 = 0 - c1;
+    }
+    if (a2 < CHECK_VALUE1)
+    {
+        a2 = 0 - a2;
+        b2 = 0 - b2;
+        c2 = 0 - c2;
+    }
+    
+    double firstCheck = a1 * x + b1 * y + c1;
+    double secondCheck = a2 * x + b2 * y + c2;
+    if((firstCheck < CHECK_VALUE1 && secondCheck < CHECK_VALUE1) || (firstCheck > CHECK_VALUE2 && secondCheck > CHECK_VALUE2))
+    {
+        return true;
+    }
+    else { return false; }
+}
+
 bool IsoscelesTrap(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
 {
     double x13, y13, x14, y14, x23, y23, x24, y24 = 0.0;
@@ -172,7 +198,8 @@ bool IsoscelesTrap(double a1, double b1, double c1, double a2, double b2, double
     findCommonPoint(a2, b2, c2, a4, b4, c4, &x24, &y24);
     double distance1 = findDistanceBetweenTwoPoints(x13, y13, x23, y23);
     double distance2 = findDistanceBetweenTwoPoints(x14, y14, x24, y24);
-    return (distance1 - distance2 < CHECK_VALUE2) ? true : false;
+    int leg = checkLeg(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
+    return (distance1 - distance2 < CHECK_VALUE2 && leg == 1) ? true : false;
 }
 
 void checkTrap(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -185,7 +212,14 @@ void checkTrap(double a1, double b1, double c1, double a2, double b2, double c2,
     {
         std::cout << "Isosceles Trapezoid";
     }
-    else { std::cout << "Trapezoid"; }
+    else 
+    { 
+        if (checkLeg(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4) == 1)
+        {
+            std::cout << "Trapezoid";
+        }
+        else { std::cout << "Not a quadrilateral"; }
+    }
 }
 
 void checkFig2(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -203,6 +237,7 @@ void checkFig2(double a1, double b1, double c1, double a2, double b2, double c2,
     else if (a1 * a3 + b1 * b3 == 0 && distance1 == distance2) { std::cout << "Square"; }
     else { std::cout << "Parallelogram"; }
 }
+
 void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
 {
     int firstCheck = areTwoLinesParallel(a1, b1, a2, b2);
