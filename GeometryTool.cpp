@@ -2,6 +2,22 @@
 
 const double CHECK_VALUE1 = -0.0000001;
 const double CHECK_VALUE2 = 0.0000001;
+const int MAX_SIZE = 100;
+const int FIRST_CHOICE = 1;
+const int SECOND_CHOICE = 2;
+const int THIRD_CHOICE = 3;
+const int FOURTH_CHOICE = 4;
+const int FIFTH_CHOICE = 5;
+const int SIXTH_CHOICE = 6;
+const int SEVENTH_CHOICE = 7;
+const int EIGHTH_CHOICE = 8;
+const int NINTH_CHOICE = 9;
+const int TENTH_CHOICE = 10;
+const int ELEVENTH_CHOICE = 11;
+const int TWELFTH_CHOICE = 12;
+const int THIRTEENTH_CHOICE = 13;
+const int MIN_DIFFERENCE = 0;
+const int MAX_DIFFERENCE = 10;
 
 bool doesPointLieOnLine(double x, double y, double a, double b, double c)
 {
@@ -32,7 +48,7 @@ void printLine(double a, double b, double c)
     else if (b > CHECK_VALUE2 && b != 1.0) {
         std::cout << "+" << b << "y";
     }
-    else { std::cout << b << "y"; }
+    else if (b < CHECK_VALUE1) { std::cout << b << "y"; }
 
     if (c > CHECK_VALUE2) {
         std::cout << "+" << c;
@@ -57,20 +73,20 @@ void printPerpendicularLineToLine(double x, double y, double a, double b, double
 void findCommonPoint(double a1, double b1, double c1, double a2, double b2, double c2, double* x, double* y)
 {
     *y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
-    *x = (-b1 * *y - c1) / a1;
+    *x = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1);
 }
 
 void findLineThroughTwoPoints(double x1, double x2, double y1, double y2, double* a, double* b, double* c)
 {
     *a = y1 - y2;
     *b = x2 - x1;
-    *c = (x1 - x2) * y1 + (y2 - y1) * x1;
+    *c = x1 * y2 - x2 * y1;
 }
 
 void findMiddle(double x1, double x2, double y1, double y2, double* newX, double* newY)
 {
-    *newX = x2 - x1;
-    *newY = y2 - y1;
+    *newX = (x2 + x1) / 2;
+    *newY = (y2 + y1) / 2;
 }
 
 double pow(double number, int power)
@@ -145,7 +161,7 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
 void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
 {
     double discriminant = pow(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
-    if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }
+    if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }    // a1, b1, c1 - parabola a2, b2, c2 - line
     else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
     {
         double x = (-a2 - b1 * b2) / 2 * a1 * b2;
@@ -163,10 +179,27 @@ void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a
 
 }
 
-bool areTwoLinesParallel(double a1, double b1, double a2, double b2)
+bool areTwoLinesParallel(double a1, double b1, double c1, double a2, double b2, double c2)
 {
-    double check = a1 * b2 - a2 * b1;
-    if (check > CHECK_VALUE1 && check < CHECK_VALUE2)
+    double newA1, newB1, newA2, newB2 = 0.0;
+    if (b1 == 0 && b2 != 0 || b1 != 0 && b2 == 0)
+    {
+        return false;
+    }
+    if (b1 == 0 && b2 == 0)
+    {
+        return true;
+    }
+    newA1 = -a1 / b1;
+    newB1 = -c1 / b1;
+    newA2 = -a2 / b2;
+    newB2 = -c2 / b2;
+    
+    double differenceA = newA1 - newA2;
+    double absDifferenceA = differenceA > 0 ? differenceA : -differenceA;
+    double differenceB = newB1 - newB2;
+    double absDifferenceB = differenceB > 0 ? differenceB : -differenceB;
+    if (absDifferenceA < CHECK_VALUE2 && absDifferenceB > CHECK_VALUE2)
     {
         return true;
     }
@@ -175,7 +208,10 @@ bool areTwoLinesParallel(double a1, double b1, double a2, double b2)
 
 double findDistanceBetweenTwoPoints(double x1, double y1, double x2, double y2)
 {
-    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    double x = x2 - x1;
+    double y = y2 - y1;
+    double distance = x * x + y * y;
+    return distance;
 }
 
 bool isAngleRight(double a1, double b1, double a2, double b2)
@@ -197,7 +233,7 @@ bool checkRectangularTrapezoid(double a1, double b1, double a2, double b2, doubl
 bool checkLeg(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
 {
     double x, y = 0.0;
-    findCommonPoint(a3, b3, c3, a4, b4, c4, &x, &y);
+    findCommonPoint(a3, b3, c3, a4, b4, c4, &x, &y);       // Legs have common point inside or outside??
     if (a1 < CHECK_VALUE1) 
     { 
         a1 = 0 - a1;
@@ -227,10 +263,14 @@ bool IsoscelesTrap(double a1, double b1, double c1, double a2, double b2, double
     findCommonPoint(a1, b1, c1, a4, b4, c4, &x14, &y14);
     findCommonPoint(a2, b2, c2, a3, b3, c3, &x23, &y23);
     findCommonPoint(a2, b2, c2, a4, b4, c4, &x24, &y24);
+    
     double distance1 = findDistanceBetweenTwoPoints(x13, y13, x23, y23);
     double distance2 = findDistanceBetweenTwoPoints(x14, y14, x24, y24);
+    double difference = distance1 - distance2;
+    double absDifference = difference >= 0 ? difference : -difference;
     int leg = checkLeg(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
-    return (distance1 - distance2 < CHECK_VALUE2 && leg == 1) ? true : false;
+
+    return (absDifference < CHECK_VALUE2 && leg == 1) ? true : false;
 }
 
 void checkTrap(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -260,12 +300,14 @@ void checkFig2(double a1, double b1, double c1, double a2, double b2, double c2,
     findCommonPoint(a1, b1, c1, a4, b4, c4, &x2, &y2);
     findCommonPoint(a2, b2, c2, a4, b4, c4, &x3, &y3);
 
-    double distance1 = findDistanceBetweenTwoPoints(x1, x2, y1, y2);
-    double distance2 = findDistanceBetweenTwoPoints(x2, x3, y2, y3);
+    double distance1 = findDistanceBetweenTwoPoints(x1, y1, x2, y2);
+    double distance2 = findDistanceBetweenTwoPoints(x2, y2, x3, y3);
+    double difference = distance1 - distance2;
+    double absDifference = difference > 0 ? difference : -difference;
 
-    if (a1 * a3 + b1 * b3 == 0 && distance1 != distance2) { std::cout << "Rectangle"; }
-    else if (a1 * a3 + b1 * b3 != 0 && distance1 == distance2) { std::cout << "Rhombus"; }
-    else if (a1 * a3 + b1 * b3 == 0 && distance1 == distance2) { std::cout << "Square"; }
+    if (a1 * a3 + b1 * b3 == 0 && absDifference >= CHECK_VALUE2) { std::cout << "Rectangle"; }
+    else if (a1 * a3 + b1 * b3 != 0 && absDifference < CHECK_VALUE2) { std::cout << "Rhombus"; }
+    else if (a1 * a3 + b1 * b3 == 0 && absDifference < CHECK_VALUE2) { std::cout << "Square"; }
     else { std::cout << "Parallelogram"; }
 }
 
@@ -285,7 +327,7 @@ bool doTwoLinesMatch(double a1, double b1, double c1, double a2, double b2, doub
 bool commonPointThreeLines(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
 {
     double x, y = 0.0;
-    if (areTwoLinesParallel(a1, b1, a2, b2) == 0 && doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 0)
+    if (areTwoLinesParallel(a1, b1, c1, a2, b2, c2) == 0 && doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 0)
     {
         findCommonPoint(a1, b1, c1, a2, b2, c2, &x, &y);
         double checkThirdLine = a3 * x + b3 * y + c3;
@@ -305,12 +347,12 @@ bool commonPointThreeLines(double a1, double b1, double c1, double a2, double b2
 
 void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
 {
-    int firstCheck = areTwoLinesParallel(a1, b1, a2, b2);
-    int secondCheck = areTwoLinesParallel(a1, b1, a3, b3);
-    int thirdCheck = areTwoLinesParallel(a1, b1, a4, b4);
-    int fourthCheck = areTwoLinesParallel(a2, b2, a3, b3);
-    int fifthCheck = areTwoLinesParallel(a2, b2, a4, b4);
-    int sixthCheck = areTwoLinesParallel(a3, b3, a4, b4);
+    int firstCheck = areTwoLinesParallel(a1, b1, c1, a2, b2, c2);
+    int secondCheck = areTwoLinesParallel(a1, b1, c1, a3, b3, c3);
+    int thirdCheck = areTwoLinesParallel(a1, b1, c1, a4, b4, c4);
+    int fourthCheck = areTwoLinesParallel(a2, b2, c2, a3, b3, c3);
+    int fifthCheck = areTwoLinesParallel(a2, b2, c2, a4, b4, c4);
+    int sixthCheck = areTwoLinesParallel(a3, b3, c3, a4, b4, c4);
 
     int firstPoint = commonPointThreeLines(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
     int secondPoint = commonPointThreeLines(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);
@@ -319,78 +361,480 @@ void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, 
     int fifthPoint = commonPointThreeLines(a2, b2, c2, a4, b4, c4, a1, b1, c1, a3, b3, c3);
     int sixthPoint = commonPointThreeLines(a3, b3, c3, a4, b4, c4, a1, b1, c1, a2, b2, c2);
 
+    int firstMatch = doTwoLinesMatch(a1, b1, c1, a2, b2, c2);
+    int secondMatch = doTwoLinesMatch(a1, b1, c1, a3, b3, c3);
+    int thirdMatch = doTwoLinesMatch(a1, b1, c1, a4, b4, c4);
+    int fourthMatch = doTwoLinesMatch(a2, b2, c2, a3, b3, c3);
+    int fifthMatch = doTwoLinesMatch(a2, b2, c2, a4, b4, c4);
+    int sixthMatch = doTwoLinesMatch(a3, b3, c3, a4, b4, c4);
+
     int sum = firstCheck + secondCheck + thirdCheck + fourthCheck + fifthCheck + sixthCheck;
     int sum2 = firstPoint + secondPoint + thirdPoint + fourthPoint + fifthPoint + sixthPoint;
-    if (sum >= 3 || sum2 >= 3) { std::cout << "Not a quadrilateral"; }
-    else if (sum == 0 && sum2 == 0) { std::cout << "Arbitrary quadrilateral"; }
+    int sum3 = firstMatch + secondMatch + thirdMatch + fourthMatch + fifthMatch + sixthMatch;
+    if (sum >= 3 || sum2 >= 3 || sum3 >= 1) { std::cout << "Not a quadrilateral"; }
+    else if (sum == 0 && sum2 == 0 && sum3 == 0) { std::cout << "Arbitrary quadrilateral"; }
     else
     {
         if (firstCheck == 1)
         {
-            if (sixthCheck == 1)
-            { checkFig2(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);}
-            else { checkTrap(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);}
+            if (sixthCheck == 1) { 
+                checkFig2(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
+            }
+            else { 
+                checkTrap(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
+            }
         }
         else if (secondCheck == 1)
         {
-            if (fifthCheck == 1)
-            {checkFig2(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);}
+            if (fifthCheck == 1) {
+                checkFig2(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);
+            }
             else {checkTrap(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);}
         }
         else if (thirdCheck == 1)
         {
-            if (fourthCheck == 1)
-            {checkFig2(a1, b1, c1, a4, b4, c4, a2, b2, c2, a3, b3, c3);}
-            else
-            { checkTrap(a1, b1, c1, a4, b4, c4, a2, b2, c2, a3, b3, c3);}
+            if (fourthCheck == 1) {
+                checkFig2(a1, b1, c1, a4, b4, c4, a2, b2, c2, a3, b3, c3);
+            }
+            else { 
+                checkTrap(a1, b1, c1, a4, b4, c4, a2, b2, c2, a3, b3, c3);
+            }
         }
-        else if (sixthCheck == 1 && firstCheck == 0)
-        { checkTrap(a3, b3, c3, a4, b4, c4, a1, b1, c1, a2, b2, c2); }
-        else if (fifthCheck == 1 && secondCheck == 0)
-        {checkTrap(a2, b2, c2, a4, b4, c4, a1, b1, c1, a3, b3, c3); }
-        else if (fourthCheck == 1 && thirdCheck == 0)
-        { checkTrap(a2, b2, c2, a3, b3, c3, a1, b1, c1, a4, b4, c4); }
+        else if (sixthCheck == 1 && firstCheck == 0) { 
+            checkTrap(a3, b3, c3, a4, b4, c4, a1, b1, c1, a2, b2, c2); 
+        }
+        else if (fifthCheck == 1 && secondCheck == 0) {
+            checkTrap(a2, b2, c2, a4, b4, c4, a1, b1, c1, a3, b3, c3); 
+        }
+        else if (fourthCheck == 1 && thirdCheck == 0) { 
+            checkTrap(a2, b2, c2, a3, b3, c3, a1, b1, c1, a4, b4, c4); 
+        }
     }
 }
+
+bool isValidName(const char* name)
+{
+    size_t index = 0;
+    while (name[index] != '\0')
+    {
+        if (name[index] < 'a' || name[index] > 'z')
+        {
+            if (name[index] < 'A' || name[index] > 'Z')
+            {
+                if (name[index] - '0' < 0 || name[index] - '0' > 9)
+                {
+                    if (name[index] != '_')
+                        return false;
+                }
+            }
+        }
+        index++;
+    }
+    return true;
+}
+
+void checkName(char* name)
+{
+    while (isValidName(name) == 0)
+    {
+        std::cout << "Please, enter a name that includes latin letters, arabic numbers or '_'.";
+        std::cin >> name;
+    }
+    
+}
+
+void actionsPointAndLine(int firstChoiceNumber, int secondChoiceNumber)
+{
+    double x, y = 0.0;
+    double a, b, c = 0.0;
+    char pointName[MAX_SIZE] = "\0";
+    char lineName[MAX_SIZE] = "\0";
+    if (firstChoiceNumber == SECOND_CHOICE)
+    {
+        std::cout << "Enter the name of the point:";
+        std::cin >> pointName;
+        checkName(pointName);
+        std::cout << "Enter the name of the line:";
+        std::cin >> lineName;
+        checkName(lineName);
+    }
+    if (secondChoiceNumber == THIRD_CHOICE)
+    {
+        std::cout << "Enter point's coordinates: ";
+        std::cin >> x >> y;
+        std::cout << "Enter the coefficients of the line: ";
+        std::cin >> a >> b >> c;
+        if (doesPointLieOnLine(x, y, a, b, c) == 1) {
+            std::cout << "Yes, the point " << pointName << " lies on the line " << lineName;
+        }
+        else {
+            std::cout << "The point does not lie on the line.";
+        }
+    }
+    else if (secondChoiceNumber == FOURTH_CHOICE)
+    {
+        std::cout << "Enter point's coordinates: ";
+        std::cin >> x >> y;
+        std::cout << "Enter the coefficients of the line: ";
+        std::cin >> a >> b >> c;
+        std::cout << "The equatation of the line parallel to line " << lineName << " through point " << pointName << " is: "; 
+        printLineParallelToLineThroughPoint(x, y, a, b, c);
+    }
+    else if (secondChoiceNumber == FIFTH_CHOICE)
+    {
+        std::cout << "Enter point's coordinates: ";
+        std::cin >> x >> y;
+        std::cout << "Enter the coefficients of the line: ";
+        std::cin >> a >> b >> c;
+        if (doesPointLieOnLine(x, y, a, b, c) == 1) {
+            std::cout << "The equatation of the line perpendicular to line " << lineName << " through point " << pointName << " is: ";
+            printPerpendicularLineToLine(x, y, a, b, c);
+        }
+        else {
+            std::cout << "The point is not on the line." << std::endl;
+            std::cout << "But the equation of the line perpendicular to line " << lineName << " through your point " << pointName << "is : " << std::endl;
+            printPerpendicularLineToLine(x, y, a, b, c);
+        }
+    }
+}
+
+void actionsTwoLines(int firstChoiceNumber, int secondChoiceNumber)
+{
+    double a1, b1, c1 = 0.0;
+    double a2, b2, c2 = 0.0;
+    double x, y = 0.0;
+    char line1Name[MAX_SIZE] = "\0";
+    char line2Name[MAX_SIZE] = "\0";
+    if (firstChoiceNumber == SECOND_CHOICE)
+    {
+        std::cout << "Enter the name of the first line:";
+        std::cin >> line1Name;
+        checkName(line1Name);
+        std::cout << "Enter the name of the second line:";
+        std::cin >> line2Name;
+        checkName(line2Name);
+    }
+    if (secondChoiceNumber == SIXTH_CHOICE)
+    {
+        std::cout << "Enter the coeficients of the first line: ";
+        std::cin >> a1 >> b1 >> c1;
+        std::cout << "Enter the coeficients of the second line: ";
+        std::cin >> a2 >> b2 >> c2;
+        if (areTwoLinesParallel(a1, b1, c1, a2, b2, c2) == 0 && doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 0)
+        {
+            findCommonPoint(a1, b1, c1, a2, b2, c2, &x, &y);
+            std::cout << "The common point of the first line " << line1Name << " and the second line " << 
+                line2Name << " is: (" << x << ";" << y << ")";
+        }
+        else if (areTwoLinesParallel(a1, b1, c1, a2, b2, c2) == 1)
+        {
+            std::cout << "The two lines " << line1Name << " " << line2Name << " are parallel";
+        }
+        else if (doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 1)
+        {
+            std::cout << "The two lines " << line1Name << " " << line2Name << " match";
+        }
+    }
+}
+
+void printHeights(double x1, double y1, double x2, double y2, double x3, double y3)
+{
+    double a, b, c = 0.0;
+    findLineThroughTwoPoints(x1, x2, y1, y2, &a, &b, &c);
+    printPerpendicularLineToLine(x3, y3, a, b, c);
+}
+
+void printMedians(double x1, double y1, double x2, double y2, double x3, double y3)
+{
+    double newX, newY, a, b, c = 0.0;
+    findMiddle(x1, x2, y1, y2, &newX, &newY);
+    findLineThroughTwoPoints(x3, newX, y3, newY, &a, &b, &c);
+    printLine(a, b, c);
+}
+
+void printBisectors(double x1, double y1, double x2, double y2, double x3, double y3)
+{
+    double newX, newY, a, b, c = 0.0;
+    findMiddle(x1, x2, y1, y2, &newX, &newY);
+    findLineThroughTwoPoints(x1, x2, y1, y2, &a, &b, &c);
+    printPerpendicularLineToLine(newX, newY, a, b, c);
+}
+
+void actionsWithTriangle(int firstChoiceNumber, int secondChoiceNumber)
+{
+    double x1, x2, x3, y1, y2, y3 = 0.0;
+    char point1Name[MAX_SIZE] = "\0";
+    char point2Name[MAX_SIZE] = "\0";
+    char point3Name[MAX_SIZE] = "\0";
+    if (firstChoiceNumber == SECOND_CHOICE)
+    {
+        std::cout << "Enter the name of the first point:";
+        std::cin >> point1Name;
+        checkName(point1Name);
+        std::cout << "Enter the name of the second point:";
+        std::cin >> point2Name;
+        checkName(point2Name);
+        std::cout << "Enter the name of the third point:";
+        std::cin >> point3Name;
+        checkName(point3Name);
+    }
+    if (secondChoiceNumber == SEVENTH_CHOICE)
+    {
+        
+        std::cout << "Enter the coordinates of the first point: ";
+        std::cin >> x1 >> y1;
+        std::cout << "Enter the coordinates of the second point: ";
+        std::cin >> x2 >> y2;
+        std::cout << "Enter the coordinates of the third point: ";
+        std::cin >> x3 >> y3;
+        
+        std::cout << "The height through the first point " << point1Name << " is: ";
+        printHeights(x2, y2, x3, y3, x1, y1); 
+        std::cout << std::endl << "The height through the second point " << point2Name << " is: ";
+        printHeights(x1, y1, x3, y3, x2, y2);
+        std::cout << std::endl << "The height through the third point " << point3Name << " is: ";
+        printHeights(x1, y1, x2, y2, x3, y3);
+
+        std::cout << std::endl << "The median through the first point " << point1Name << " is: ";
+        printMedians(x2, y2, x3, y3, x1, y1);
+        std::cout << std::endl << "The median through the second point " << point2Name << " is: ";
+        printMedians(x1, y1, x3, y3, x2, y2);
+        std::cout << std::endl << "The median through the third point " << point3Name << " is: ";
+        printMedians(x1, y1, x2, y2, x3, y3);
+
+        std::cout << std::endl << "The bisector through the first point " << point1Name << " is: ";
+        printBisectors(x2, y2, x3, y3, x1, y1);
+        std::cout << std::endl << "The bisector through the second point " << point2Name << " is: ";
+        printBisectors(x1, y1, x3, y3, x2, y2);
+        std::cout << std::endl << "The bisector through the third point " << point3Name << " is: ";
+        printBisectors(x1, y1, x2, y2, x3, y3);
+        
+    }
+}
+
+void actionsWithTriangle2(int firstChoiceNumber, int secondChoiceNumber)
+{
+    char point1Name[MAX_SIZE] = "\0";
+    char point2Name[MAX_SIZE] = "\0";
+    char point3Name[MAX_SIZE] = "\0";
+    double x1, x2, x3, y1, y2, y3 = 0.0;
+    std::cout << "Enter the coordinates of the first point: ";
+    std::cin >> x1 >> y1;
+    std::cout << "Enter the coordinates of the second point: ";
+    std::cin >> x2 >> y2;
+    std::cout << "Enter the coordinates of the third point: ";
+    std::cin >> x3 >> y3;
+    if (firstChoiceNumber == SECOND_CHOICE) {
+        std::cout << "Enter the name of the first point:";
+        std::cin >> point1Name;
+        checkName(point1Name);
+        std::cout << "Enter the name of the second point:";
+        std::cin >> point2Name;
+        checkName(point1Name);
+        std::cout << "Enter the name of the third point:";
+        std::cin >> point3Name;
+        checkName(point3Name);
+    }
+    if (secondChoiceNumber == EIGHTH_CHOICE) {
+        std::cout << "The height through the first point " << point1Name << " is: ";
+        printHeights(x2, y2, x3, y3, x1, y1);
+        std::cout << std::endl << "The height through the second point " << point2Name << " is: ";
+        printHeights(x1, y1, x3, y3, x2, y2);
+        std::cout << std::endl << "The height through the third point " << point3Name << " is: ";
+        printHeights(x1, y1, x2, y2, x3, y3);
+    }
+    else if (secondChoiceNumber == NINTH_CHOICE) {
+
+        std::cout << "The median through the first point " << point1Name << " is: ";
+        printMedians(x2, y2, x3, y3, x1, y1);
+        std::cout << std::endl << "The median through the second point " << point2Name << " is: ";
+        printMedians(x1, y1, x3, y3, x2, y2);
+        std::cout << std::endl << "The median through the third point " << point3Name << " is: ";
+        printMedians(x1, y1, x2, y2, x3, y3);
+    }
+    else if (secondChoiceNumber == TENTH_CHOICE) {
+
+        std::cout << "The bisector through the first point " << point1Name << " is: ";
+        printBisectors(x2, y2, x3, y3, x1, y1);
+        std::cout << std::endl << "The bisector through the second point " << point2Name << " is: ";
+        printBisectors(x1, y1, x3, y3, x2, y2);
+        std::cout << std::endl << "The bisector through the third point " << point3Name << " is: ";
+        printBisectors(x1, y1, x2, y2, x3, y3);
+    }
+}
+
+void actionsWithParabolaAndPoint(int firstChoiceNumber, int secondChoiceNumber)
+{
+    double x, y, a, b, c = 0.0;
+    char parabolaName[MAX_SIZE] = "\0";
+    char pointName[MAX_SIZE] = "\0";
+    if (firstChoiceNumber == SECOND_CHOICE)
+    {
+        std::cout << "Enter the name of the point:";
+        std::cin >> pointName;
+        checkName(pointName);
+        std::cout << "Enter the name of the parabola:";
+        std::cin >> parabolaName;
+        checkName(parabolaName);
+    }
+    if (secondChoiceNumber == ELEVENTH_CHOICE)
+    {
+        std::cout << "Enter the point coordinates: ";
+        std::cin >> x >> y;
+        std::cout << "Enter the parabola coeficients: ";
+        std::cin >> a >> b >> c;
+        if (pointLiesOnParabola(x, y, a, b, c) == 1)
+        {
+            std::cout << "The tangent through point " << pointName << " toward the parabola " << parabolaName << ":";
+            findTangentThroughPointOnParabola(x, y, a, b, c);
+        }
+        else
+        {
+            std::cout << "The tangent(s) through point " << pointName << " toward the parabola " << parabolaName << ":";
+            findTangentThroughPointNotOnParabola(x, y, a, b, c);
+        }
+    }
+}
+
+void actionsWithParabolaAndLine(int firstChoiceNumber, int secondChoiceNumber)
+{
+    double a1, b1, c1, a2, b2, c2 = 0.0;
+    char parabolaName[MAX_SIZE] = "\0";
+    char lineName[MAX_SIZE] = "\0";
+    if (firstChoiceNumber == SECOND_CHOICE)
+    {
+        std::cout << "Enter the name of the parabola:";
+        std::cin >> parabolaName;
+        checkName(parabolaName);
+        std::cout << "Enter the name of the line:";
+        std::cin >> lineName;
+        checkName(lineName);
+    }
+    if (secondChoiceNumber == TWELFTH_CHOICE)
+    {
+        std::cout << "Enter the coeficients of the parabola:";
+        std::cin >> a1 >> b1 >> c1;
+        std::cout << "Enter the coeficients of the line:";
+        std::cin >> a2 >> b2 >> c2;
+        std::cout << "The common point(s) of the parabola " << parabolaName << " and the line " << lineName << ":";
+        findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);
+    }
+}
+
+void actionsWithFourLines(int firstChoiceNumber, int secondChoiceNumber)
+{
+    double a1, b1, c1, a2, b2, c2 = 0.0;
+    double a3, b3, c3, a4, b4, c4 = 0.0;
+    char line1Name[MAX_SIZE] = "\0";
+    char line2Name[MAX_SIZE] = "\0";
+    char line3Name[MAX_SIZE] = "\0";
+    char line4Name[MAX_SIZE] = "\0";
+    if (firstChoiceNumber == SECOND_CHOICE)
+    {
+        std::cout << "Enter the name of the first line:";
+        std::cin >> line1Name;
+        checkName(line1Name);
+        std::cout << "Enter the name of the second line:";
+        std::cin >> line2Name;
+        checkName(line2Name);
+        std::cout << "Enter the name of the third line:";
+        std::cin >> line3Name;
+        checkName(line3Name);
+        std::cout << "Enter the name of the fourth line:";
+        std::cin >> line4Name;
+        checkName(line4Name);
+    }
+    if (secondChoiceNumber == THIRTEENTH_CHOICE)
+    {
+        std::cout << "Enter the coeficients of the first line: " << std::endl;
+        std::cin >> a1 >> b1 >> c1;
+        std::cout << "Enter the coeficients of the second line: " << std::endl;
+        std::cin >> a2 >> b2 >> c2;
+        std::cout << "Enter the coeficients of the third line: " << std::endl;
+        std::cin >> a3 >> b3 >> c3;
+        std::cout << "Enter the coeficients of the fourth line: " << std::endl;
+        std::cin >> a4 >> b4 >> c4;
+
+        std::cout << "The type of quadrilateral which the first line " << line1Name << ", the second line "
+            << line2Name << ", the third line " << line3Name << ", the fourth line " << line4Name << " : ";
+        checkFig(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
+    }
+}
+
+void printOptions()
+{
+    std::cout << std::endl;
+    std::cout << "Please, choose one of these options by entering one of the numbers 3 - 10." << std::endl;
+    std::cout << "3. Check if a point lies on a line." << std::endl;
+    std::cout << "4. With a given line q and a point p, output an equatation of a line, parallel to q and p lies on it." << std::endl;
+    std::cout << "5. With a give line q and a point p, lying on it, output an equatation of a line perpendicular to q with a heel in p." << std::endl;
+    std::cout << "6. With two given lines, find their common point if it exists." << std::endl;
+    std::cout << "7. Triangle (set with three points) find the equatations of its heights, medians and bisectors." << std::endl;
+    std::cout << "8. Triangle (set with three points) find the equatations of its heights." << std::endl;
+    std::cout << "9. Triangle (set with three points) find the equatations of its medians." << std::endl;
+    std::cout << "10. Triangle (set with three points) find the equatations of its bisectors." << std::endl;
+    std::cout << "11. With a given equatation of a parabola and a point, ";
+    std::cout << "find the equatation of the tangent towards the parabola in the given point.";
+    std::cout << std::endl;
+    std::cout << "12. With given equatations of a parabola and a line, find their common points." << std::endl;
+    std::cout << "13. With given equatations of four lines, find the type of quadrilateral they form." << std::endl;
+}
+
+void printResults(int firstChoiceNumber, int secondChoiceNumber)
+{
+    switch (secondChoiceNumber)
+    {
+      case 3:
+      case 4:
+      case 5:
+         actionsPointAndLine(firstChoiceNumber, secondChoiceNumber);
+         break;
+      case 6:
+        actionsTwoLines(firstChoiceNumber, secondChoiceNumber);
+        break;
+      case 7:
+          actionsWithTriangle(firstChoiceNumber, secondChoiceNumber);
+          break;
+      case 8:
+      case 9:
+      case 10:
+          actionsWithTriangle2(firstChoiceNumber, secondChoiceNumber);
+          break;
+      case 11:
+          actionsWithParabolaAndPoint(firstChoiceNumber, secondChoiceNumber);
+          break;
+      case 12:
+          actionsWithParabolaAndLine(firstChoiceNumber, secondChoiceNumber);
+          break;
+      case 13:
+          actionsWithFourLines(firstChoiceNumber, secondChoiceNumber);
+          break;
+    }
+}
+
 int main()
 {
-    /*double x, y, z, a, b, c = 0.0;
-    char name[100];
-    std::cin >> name;
-    std::cin.ignore( 2, ' ');
-    std::cin >> x >> y >> z;
-    std::cin.ignore();
-    char name2[100];
-    std::cin >> name2;
-    std::cin.ignore(2, ' ');
-    std::cin >> a >> b >> c;
-    findCommonPoint(x, y, z, a, b, c);*/
+    int firstChoiceNumber = 0;
+    std::cout << "Please, choose one of these options by entering the number 1 or 2:" << std::endl;
+    std::cout << "1. Input lines with their coefficients and points with their coordinates." << std::endl;
+    std::cout << "2. Input lines with their coefficients and name, and points with their coordinates and name." << std::endl;
+    std::cin >> firstChoiceNumber;
 
-    /*double x, y, a, b, c = 0.0;
-    std::cin >> x >> y >> a >> b >> c;
-    std::cout<<doesPointLieOnLine(x, y, a, b, c);*/
-    //double x1, x2, x3, y1, y2, y3, newX, newY, a, b, c = 0.0;
-    //std::cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
-    //findMiddle(x1, x2, y1, y2, &newX, &newY);
-    //findLineThroughTwoPoints(newX, x3, newY, y3, &a, &b, &c); //mediana
-    //printLine(a, b, c);
-    /*findLineThroughTwoPoints(x2, x3, y2, y3, &a,&b,&c);  //heigth
-    
-    printPerpendicularLineToLine(x1, y1, a, b, c);*/
+    while (firstChoiceNumber != FIRST_CHOICE && firstChoiceNumber != SECOND_CHOICE)
+    {
+        std::cout << "Please, enter one of the numbers 1 or 2." << std::endl;
+        std::cin >> firstChoiceNumber;
+    }
 
-    /*double x, y, a, b, c = 0.0;
-    std::cin >> x >> y >> a >> b >> c;
-    findTangentThroughPointOnParabola(x, y, a, b, c);*/
+    int secondChoiceNumber = 0;
+    printOptions();
+    std::cin >> secondChoiceNumber;
 
-    //double a1, b1, c1, a2, b2, c2 = 0.0;
-    //std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2;
-    ///*findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);*/
-    //std::cout<<areTwoLinesParallel(a1, b1, a2, b2);
+    while (THIRTEENTH_CHOICE - secondChoiceNumber < MIN_DIFFERENCE || THIRTEENTH_CHOICE - secondChoiceNumber > TENTH_CHOICE)
+    {
+        std::cout << "Please, enter one of the numbers from 3 to 13." << std::endl;
+        std::cin >> secondChoiceNumber;
+    }
 
-    /*double a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4 = 0.0;
-    std::cin >> a1 >> b1 >> c1 >> a2 >> b2 >> c2 >> a3 >> b3 >> c3 >> a4 >> b4 >> c4;
-    checkFig(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);*/
-    double x, y, a, b, c = 0.0;
-    std::cin >> x >> y >> a >> b >> c;
-    findTangentThroughPointNotOnParabola(x, y, a, b, c);
+    printResults(firstChoiceNumber, secondChoiceNumber);
 }
