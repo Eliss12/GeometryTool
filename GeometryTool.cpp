@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 const double CHECK_VALUE1 = -0.0000001;
 const double CHECK_VALUE2 = 0.0000001;
@@ -267,7 +268,7 @@ bool IsoscelesTrap(double a1, double b1, double c1, double a2, double b2, double
     double distance1 = findDistanceBetweenTwoPoints(x13, y13, x23, y23);
     double distance2 = findDistanceBetweenTwoPoints(x14, y14, x24, y24);
     double difference = distance1 - distance2;
-    double absDifference = difference >= 0 ? difference : -difference;
+    double absDifference = difference > 0 ? difference : -difference;
     int leg = checkLeg(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
 
     return (absDifference < CHECK_VALUE2 && leg == 1) ? true : false;
@@ -305,9 +306,10 @@ void checkFig2(double a1, double b1, double c1, double a2, double b2, double c2,
     double difference = distance1 - distance2;
     double absDifference = difference > 0 ? difference : -difference;
 
-    if (a1 * a3 + b1 * b3 == 0 && absDifference >= CHECK_VALUE2) { std::cout << "Rectangle"; }
-    else if (a1 * a3 + b1 * b3 != 0 && absDifference < CHECK_VALUE2) { std::cout << "Rhombus"; }
-    else if (a1 * a3 + b1 * b3 == 0 && absDifference < CHECK_VALUE2) { std::cout << "Square"; }
+    double angle = a1 * a3 + b1 * b3;
+    if (angle > CHECK_VALUE1 && angle < CHECK_VALUE2 && absDifference >= CHECK_VALUE2) { std::cout << "Rectangle"; }
+    else if (angle < CHECK_VALUE1 || angle > CHECK_VALUE2 && absDifference < CHECK_VALUE2) { std::cout << "Rhombus"; }
+    else if (angle > CHECK_VALUE1 && angle < CHECK_VALUE2 && absDifference < CHECK_VALUE2) { std::cout << "Square"; }
     else { std::cout << "Parallelogram"; }
 }
 
@@ -449,6 +451,7 @@ void actionsPointAndLine(int firstChoiceNumber, int secondChoiceNumber)
     double a, b, c = 0.0;
     char pointName[MAX_SIZE] = "\0";
     char lineName[MAX_SIZE] = "\0";
+
     if (firstChoiceNumber == SECOND_CHOICE)
     {
         std::cout << "Enter the name of the point:";
@@ -458,6 +461,7 @@ void actionsPointAndLine(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> lineName;
         checkName(lineName);
     }
+
     if (secondChoiceNumber == THIRD_CHOICE)
     {
         std::cout << "Enter point's coordinates: ";
@@ -486,6 +490,7 @@ void actionsPointAndLine(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> x >> y;
         std::cout << "Enter the coefficients of the line: ";
         std::cin >> a >> b >> c;
+
         if (doesPointLieOnLine(x, y, a, b, c) == 1) {
             std::cout << "The equatation of the line perpendicular to line " << lineName << " through point " << pointName << " is: ";
             printPerpendicularLineToLine(x, y, a, b, c);
@@ -505,6 +510,7 @@ void actionsTwoLines(int firstChoiceNumber, int secondChoiceNumber)
     double x, y = 0.0;
     char line1Name[MAX_SIZE] = "\0";
     char line2Name[MAX_SIZE] = "\0";
+
     if (firstChoiceNumber == SECOND_CHOICE)
     {
         std::cout << "Enter the name of the first line:";
@@ -520,6 +526,7 @@ void actionsTwoLines(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> a1 >> b1 >> c1;
         std::cout << "Enter the coeficients of the second line: ";
         std::cin >> a2 >> b2 >> c2;
+
         if (areTwoLinesParallel(a1, b1, c1, a2, b2, c2) == 0 && doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 0)
         {
             findCommonPoint(a1, b1, c1, a2, b2, c2, &x, &y);
@@ -566,6 +573,7 @@ void actionsWithTriangle(int firstChoiceNumber, int secondChoiceNumber)
     char point1Name[MAX_SIZE] = "\0";
     char point2Name[MAX_SIZE] = "\0";
     char point3Name[MAX_SIZE] = "\0";
+
     if (firstChoiceNumber == SECOND_CHOICE)
     {
         std::cout << "Enter the name of the first point:";
@@ -578,6 +586,7 @@ void actionsWithTriangle(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> point3Name;
         checkName(point3Name);
     }
+
     if (secondChoiceNumber == SEVENTH_CHOICE)
     {
         
@@ -624,6 +633,7 @@ void actionsWithTriangle2(int firstChoiceNumber, int secondChoiceNumber)
     std::cin >> x2 >> y2;
     std::cout << "Enter the coordinates of the third point: ";
     std::cin >> x3 >> y3;
+
     if (firstChoiceNumber == SECOND_CHOICE) {
         std::cout << "Enter the name of the first point:";
         std::cin >> point1Name;
@@ -635,6 +645,7 @@ void actionsWithTriangle2(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> point3Name;
         checkName(point3Name);
     }
+
     if (secondChoiceNumber == EIGHTH_CHOICE) {
         std::cout << "The height through the first point " << point1Name << " is: ";
         printHeights(x2, y2, x3, y3, x1, y1);
@@ -668,6 +679,7 @@ void actionsWithParabolaAndPoint(int firstChoiceNumber, int secondChoiceNumber)
     double x, y, a, b, c = 0.0;
     char parabolaName[MAX_SIZE] = "\0";
     char pointName[MAX_SIZE] = "\0";
+
     if (firstChoiceNumber == SECOND_CHOICE)
     {
         std::cout << "Enter the name of the point:";
@@ -677,6 +689,7 @@ void actionsWithParabolaAndPoint(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> parabolaName;
         checkName(parabolaName);
     }
+
     if (secondChoiceNumber == ELEVENTH_CHOICE)
     {
         std::cout << "Enter the point coordinates: ";
@@ -690,7 +703,7 @@ void actionsWithParabolaAndPoint(int firstChoiceNumber, int secondChoiceNumber)
         }
         else
         {
-            std::cout << "The tangent(s) through point " << pointName << " toward the parabola " << parabolaName << ":";
+            std::cout << "The tangent(s) through point " << pointName << " toward the parabola " << parabolaName << ":" << std::endl;
             findTangentThroughPointNotOnParabola(x, y, a, b, c);
         }
     }
@@ -710,6 +723,7 @@ void actionsWithParabolaAndLine(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> lineName;
         checkName(lineName);
     }
+
     if (secondChoiceNumber == TWELFTH_CHOICE)
     {
         std::cout << "Enter the coeficients of the parabola:";
@@ -729,6 +743,7 @@ void actionsWithFourLines(int firstChoiceNumber, int secondChoiceNumber)
     char line2Name[MAX_SIZE] = "\0";
     char line3Name[MAX_SIZE] = "\0";
     char line4Name[MAX_SIZE] = "\0";
+
     if (firstChoiceNumber == SECOND_CHOICE)
     {
         std::cout << "Enter the name of the first line:";
@@ -744,6 +759,7 @@ void actionsWithFourLines(int firstChoiceNumber, int secondChoiceNumber)
         std::cin >> line4Name;
         checkName(line4Name);
     }
+
     if (secondChoiceNumber == THIRTEENTH_CHOICE)
     {
         std::cout << "Enter the coeficients of the first line: " << std::endl;
@@ -784,31 +800,60 @@ void printResults(int firstChoiceNumber, int secondChoiceNumber)
 {
     switch (secondChoiceNumber)
     {
-      case 3:
-      case 4:
-      case 5:
+      case THIRD_CHOICE:
+      case FOURTH_CHOICE:
+      case FIFTH_CHOICE:
          actionsPointAndLine(firstChoiceNumber, secondChoiceNumber);
          break;
-      case 6:
+      case SIXTH_CHOICE:
         actionsTwoLines(firstChoiceNumber, secondChoiceNumber);
         break;
-      case 7:
+      case SEVENTH_CHOICE:
           actionsWithTriangle(firstChoiceNumber, secondChoiceNumber);
           break;
-      case 8:
-      case 9:
-      case 10:
+      case EIGHTH_CHOICE:
+      case NINTH_CHOICE:
+      case TENTH_CHOICE:
           actionsWithTriangle2(firstChoiceNumber, secondChoiceNumber);
           break;
-      case 11:
+      case ELEVENTH_CHOICE:
           actionsWithParabolaAndPoint(firstChoiceNumber, secondChoiceNumber);
           break;
-      case 12:
+      case TWELFTH_CHOICE:
           actionsWithParabolaAndLine(firstChoiceNumber, secondChoiceNumber);
           break;
-      case 13:
+      case THIRTEENTH_CHOICE:
           actionsWithFourLines(firstChoiceNumber, secondChoiceNumber);
           break;
+    }
+}
+
+void printOutput(int firstChoiceNumber, int secondChoiceNumber, char closure)
+{
+    while (true)
+    {
+        std::cin >> secondChoiceNumber;
+
+        while (THIRTEENTH_CHOICE - secondChoiceNumber < MIN_DIFFERENCE || THIRTEENTH_CHOICE - secondChoiceNumber > TENTH_CHOICE)
+        {
+            std::cout << "Please, enter one of the numbers from 3 to 13." << std::endl;
+            std::cin >> secondChoiceNumber;
+        }
+
+        printResults(firstChoiceNumber, secondChoiceNumber);
+        std::cout << std::endl;
+        std::cout << "If you want to close the app press 'C'." << std::endl;
+        std::cout << "If you want to continue press any other key." << std::endl;
+        std::cin >> closure;
+        std::cout << std::endl;
+
+        if (closure == 'C') {
+            break;
+        }
+        else
+        {
+            std::cout << "Please, choose one of these options by entering one of the numbers 3 - 10." << std::endl;
+        }
     }
 }
 
@@ -827,14 +872,8 @@ int main()
     }
 
     int secondChoiceNumber = 0;
+    char closure = '\0';
     printOptions();
-    std::cin >> secondChoiceNumber;
-
-    while (THIRTEENTH_CHOICE - secondChoiceNumber < MIN_DIFFERENCE || THIRTEENTH_CHOICE - secondChoiceNumber > TENTH_CHOICE)
-    {
-        std::cout << "Please, enter one of the numbers from 3 to 13." << std::endl;
-        std::cin >> secondChoiceNumber;
-    }
-
-    printResults(firstChoiceNumber, secondChoiceNumber);
+    printOutput(firstChoiceNumber, secondChoiceNumber, closure);
+    
 }
