@@ -90,7 +90,7 @@ void findMiddle(double x1, double x2, double y1, double y2, double* newX, double
     *newY = (y2 + y1) / 2;
 }
 
-double pow(double number, int power)
+double powNumber(double number, int power)
 {
     double result = 1;
     for (int i = 0; i < power; i++)
@@ -100,12 +100,26 @@ double pow(double number, int power)
     return result;
 }
 
+bool compareDoubleNumbers(double num1, double num2)
+{
+    double difference = num1 - num2;
+    double absDifference = difference > 0 ? difference : -difference;
+
+    if (absDifference < CHECK_VALUE2)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool pointLiesOnParabola(double x, double y, double a, double b, double c)
 {
-    double y1 = a * pow(x, 2) + b * x + c;
-    double difference = y1 - y;
-    double absDifference = difference > 0 ? difference : -difference;
-    if (absDifference < CHECK_VALUE2)
+    double y1 = a * powNumber(x, 2) + b * x + c;
+    
+    if (compareDoubleNumbers(y1, y) == 1)
     {
         return true;
     }
@@ -125,7 +139,7 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
     double quadraticA = - a;
     double quadraticB = 2 * a * x;
     double quadraticC = b * x + c - y;
-    double discriminant = pow(quadraticB, 2) - 4 * quadraticA * quadraticC;
+    double discriminant = powNumber(quadraticB, 2) - 4 * quadraticA * quadraticC;
     
     if(discriminant < CHECK_VALUE1)
     {
@@ -148,11 +162,11 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
         
         double newA1 = 2 * a * x1 + b;
         double newB1 = -1;
-        double newC1 = (2 * x1 * a + b) * (- x1) + a * pow(x1, 2) + b * x1 + c;
+        double newC1 = (2 * x1 * a + b) * (- x1) + a * powNumber(x1, 2) + b * x1 + c;
 
         double newA2 = 2 * a * x2 + b;
         double newB2 = -1;
-        double newC2 = (2 * x2 * a + b) * (- x2) + a * pow(x2, 2) + b * x2 + c;
+        double newC2 = (2 * x2 * a + b) * (- x2) + a * powNumber(x2, 2) + b * x2 + c;
         printLine(newA1, newB1, newC1);
         std::cout << std::endl;
         printLine(newA2, newB2, newC2);
@@ -161,20 +175,20 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
 
 void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
 {
-    double discriminant = pow(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
+    double discriminant = powNumber(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
     if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }    // a1, b1, c1 - parabola a2, b2, c2 - line
     else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
     {
         double x = (-a2 - b1 * b2) / 2 * a1 * b2;
-        double y = a1 * pow(x, 2) + b1 * x + c1;
+        double y = a1 * powNumber(x, 2) + b1 * x + c1;
         std::cout << "(" << x << ";" << y << ")";
     }
     else
     {
         double x1 = (-a2 - b1 * b2 + sqrt(discriminant)) / 2 * a1 * b2;
         double x2 = (-a2 - b1 * b2 - sqrt(discriminant)) / 2 * a1 * b2;
-        double y1 = a1 * pow(x1, 2) + b1 * x1 + c1;
-        double y2 = a1 * pow(x2, 2) + b1 * x2 + c1;
+        double y1 = a1 * powNumber(x1, 2) + b1 * x1 + c1;
+        double y2 = a1 * powNumber(x2, 2) + b1 * x2 + c1;
         std::cout << "(" << x1 << ";" << y1 << ")" << " " << "(" << x2 << ";" << y2 << ")";
     }
 
@@ -195,12 +209,11 @@ bool areTwoLinesParallel(double a1, double b1, double c1, double a2, double b2, 
     newB1 = -c1 / b1;
     newA2 = -a2 / b2;
     newB2 = -c2 / b2;
-    
-    double differenceA = newA1 - newA2;
-    double absDifferenceA = differenceA > 0 ? differenceA : -differenceA;
-    double differenceB = newB1 - newB2;
-    double absDifferenceB = differenceB > 0 ? differenceB : -differenceB;
-    if (absDifferenceA < CHECK_VALUE2 && absDifferenceB > CHECK_VALUE2)
+
+    int differenceA = compareDoubleNumbers(newA1, newA2);
+    int differenceB = compareDoubleNumbers(newB1, newB2);
+
+    if (compareDoubleNumbers(newA1, newA2) == 1 && compareDoubleNumbers(newB1, newB2) == 0)
     {
         return true;
     }
@@ -267,11 +280,10 @@ bool IsoscelesTrap(double a1, double b1, double c1, double a2, double b2, double
     
     double distance1 = findDistanceBetweenTwoPoints(x13, y13, x23, y23);
     double distance2 = findDistanceBetweenTwoPoints(x14, y14, x24, y24);
-    double difference = distance1 - distance2;
-    double absDifference = difference > 0 ? difference : -difference;
+    
     int leg = checkLeg(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
 
-    return (absDifference < CHECK_VALUE2 && leg == 1) ? true : false;
+    return (compareDoubleNumbers(distance1, distance2) == 1 && leg == 1) ? true : false;
 }
 
 void checkTrap(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -303,14 +315,22 @@ void checkFig2(double a1, double b1, double c1, double a2, double b2, double c2,
 
     double distance1 = findDistanceBetweenTwoPoints(x1, y1, x2, y2);
     double distance2 = findDistanceBetweenTwoPoints(x2, y2, x3, y3);
-    double difference = distance1 - distance2;
-    double absDifference = difference > 0 ? difference : -difference;
-
+    
+    int areSidesEqual = compareDoubleNumbers(distance1, distance2);
     double angle = a1 * a3 + b1 * b3;
-    if (angle > CHECK_VALUE1 && angle < CHECK_VALUE2 && absDifference >= CHECK_VALUE2) { std::cout << "Rectangle"; }
-    else if (angle < CHECK_VALUE1 || angle > CHECK_VALUE2 && absDifference < CHECK_VALUE2) { std::cout << "Rhombus"; }
-    else if (angle > CHECK_VALUE1 && angle < CHECK_VALUE2 && absDifference < CHECK_VALUE2) { std::cout << "Square"; }
-    else { std::cout << "Parallelogram"; }
+
+    if (angle > CHECK_VALUE1 && angle < CHECK_VALUE2 && areSidesEqual == 0) { 
+        std::cout << "Rectangle"; 
+    }
+    else if (angle < CHECK_VALUE1 || angle > CHECK_VALUE2 && areSidesEqual == 1) { 
+        std::cout << "Rhombus"; 
+    }
+    else if (angle > CHECK_VALUE1 && angle < CHECK_VALUE2 && areSidesEqual == 1) { 
+        std::cout << "Square"; 
+    }
+    else { 
+        std::cout << "Parallelogram"; 
+    }
 }
 
 bool doTwoLinesMatch(double a1, double b1, double c1, double a2, double b2, double c2)
@@ -373,8 +393,13 @@ void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, 
     int sum = firstCheck + secondCheck + thirdCheck + fourthCheck + fifthCheck + sixthCheck;
     int sum2 = firstPoint + secondPoint + thirdPoint + fourthPoint + fifthPoint + sixthPoint;
     int sum3 = firstMatch + secondMatch + thirdMatch + fourthMatch + fifthMatch + sixthMatch;
-    if (sum >= 3 || sum2 >= 3 || sum3 >= 1) { std::cout << "Not a quadrilateral"; }
-    else if (sum == 0 && sum2 == 0 && sum3 == 0) { std::cout << "Arbitrary quadrilateral"; }
+
+    if (sum >= 3 || sum2 >= 3 || sum3 >= 1) { 
+        std::cout << "Not a quadrilateral"; 
+    }
+    else if (sum == 0 && sum2 == 0 && sum3 == 0) { 
+        std::cout << "Arbitrary quadrilateral"; 
+    }
     else
     {
         if (firstCheck == 1)
@@ -832,6 +857,7 @@ void printOutput(int firstChoiceNumber, int secondChoiceNumber, char closure)
 {
     while (true)
     {
+        printOptions();
         std::cin >> secondChoiceNumber;
 
         while (THIRTEENTH_CHOICE - secondChoiceNumber < MIN_DIFFERENCE || THIRTEENTH_CHOICE - secondChoiceNumber > TENTH_CHOICE)
@@ -847,13 +873,23 @@ void printOutput(int firstChoiceNumber, int secondChoiceNumber, char closure)
         std::cin >> closure;
         std::cout << std::endl;
 
-        if (closure == 'C') {
+        if (closure == 'C' || closure == 'c') {
             break;
         }
         else
         {
-            std::cout << "Please, choose one of these options by entering one of the numbers 3 - 10." << std::endl;
+            system("cls");
         }
+        
+    }
+}
+
+void checkFirstChoiceNumber(int firstChoiceNumber)
+{
+    while (firstChoiceNumber != FIRST_CHOICE && firstChoiceNumber != SECOND_CHOICE)
+    {
+        std::cout << "Please, enter one of the numbers 1 or 2." << std::endl;
+        std::cin >> firstChoiceNumber;
     }
 }
 
@@ -863,17 +899,14 @@ int main()
     std::cout << "Please, choose one of these options by entering the number 1 or 2:" << std::endl;
     std::cout << "1. Input lines with their coefficients and points with their coordinates." << std::endl;
     std::cout << "2. Input lines with their coefficients and name, and points with their coordinates and name." << std::endl;
+    
     std::cin >> firstChoiceNumber;
 
-    while (firstChoiceNumber != FIRST_CHOICE && firstChoiceNumber != SECOND_CHOICE)
-    {
-        std::cout << "Please, enter one of the numbers 1 or 2." << std::endl;
-        std::cin >> firstChoiceNumber;
-    }
-
+    checkFirstChoiceNumber(firstChoiceNumber);
+    std::cout << "This program works with lines which have the type: a*x + b*y + c = 0.";
     int secondChoiceNumber = 0;
     char closure = '\0';
-    printOptions();
+    
     printOutput(firstChoiceNumber, secondChoiceNumber, closure);
     
 }
