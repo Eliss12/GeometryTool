@@ -18,10 +18,6 @@ i. With a given equatation of a parabola and a point, find the equation of the t
 j. With a given equations of a parabola and a line, find their common points.  
 k. With a given equations of four lines, find the type of quadrilateral they form.
 
-After choosing one of this options, the user is asked to enter the coordinates of the point(s) and / or the coeficients of the line(s). It must be taken in mind that the coeficients a, b and c are from the general equation of a line ax + by + c = 0.  
+After choosing one of this options, the user is asked to enter the coordinates of the point(s) and / or the coeficients of the line(s). It must be taken in mind that the coeficients a, b and c are from the general equation of a line ax + by + c = 0.
 
-<<<<<<< HEAD
-After entering the necessary points and lines, the result is printed. If the user has chosen to enter names, he will see the names in the result messages. If the user wants to continue with another task, they must press any key and they are asked to choose one of the options from a - k. If they want to stop using the app, they must press "c" or "C".
-=======
-After entering the necessary points and lines the result is printed. If the user has chosen to enter names, he will see the names in the result messages. If the user wants to continue, they must press any key and they are asked to choose one of the options from a - k. If they want to stop using the app, they must press "c" or "C".
->>>>>>> 05ec6c9cc241641a38905ddac03a18c17990b618
+After entering the necessary points and lines, the result is printed. If the user has chosen to enter names, he will see the names in the result messages. If the user wants to continue with another task, they must press any key and they are asked to choose one of the options from a - k. If they want to stop using the app, they must press "c" or "C".s
