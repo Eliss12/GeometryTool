@@ -4,19 +4,19 @@
 const double CHECK_VALUE1 = -0.0000001;
 const double CHECK_VALUE2 = 0.0000001;
 const int MAX_SIZE = 100;
-const int FIRST_CHOICE = 1;
-const int SECOND_CHOICE = 2;
-const int THIRD_CHOICE = 3;
-const int FOURTH_CHOICE = 4;
-const int FIFTH_CHOICE = 5;
-const int SIXTH_CHOICE = 6;
-const int SEVENTH_CHOICE = 7;
-const int EIGHTH_CHOICE = 8;
-const int NINTH_CHOICE = 9;
-const int TENTH_CHOICE = 10;
-const int ELEVENTH_CHOICE = 11;
-const int TWELFTH_CHOICE = 12;
-const int THIRTEENTH_CHOICE = 13;
+const char FIRST_CHOICE = '1';
+const char SECOND_CHOICE = '2';
+const char THIRD_CHOICE = 'a';
+const char FOURTH_CHOICE = 'b';
+const char FIFTH_CHOICE = 'c';
+const char SIXTH_CHOICE = 'd';
+const char SEVENTH_CHOICE = 'e';
+const char EIGHTH_CHOICE = 'f';
+const char NINTH_CHOICE = 'g';
+const char TENTH_CHOICE = 'h';
+const char ELEVENTH_CHOICE = 'i';
+const char TWELFTH_CHOICE = 'j';
+const char THIRTEENTH_CHOICE = 'k';
 const int MIN_DIFFERENCE = 0;
 const int MAX_DIFFERENCE = 10;
 
@@ -470,7 +470,7 @@ void checkName(char* name)
     
 }
 
-void actionsPointAndLine(int firstChoiceNumber, int secondChoiceNumber)
+void actionsPointAndLine(char firstChoiceNumber, char secondChoiceNumber)
 {
     double x, y = 0.0;
     double a, b, c = 0.0;
@@ -528,7 +528,7 @@ void actionsPointAndLine(int firstChoiceNumber, int secondChoiceNumber)
     }
 }
 
-void actionsTwoLines(int firstChoiceNumber, int secondChoiceNumber)
+void actionsTwoLines(char firstChoiceNumber, char secondChoiceNumber)
 {
     double a1, b1, c1 = 0.0;
     double a2, b2, c2 = 0.0;
@@ -592,7 +592,7 @@ void printBisectors(double x1, double y1, double x2, double y2, double x3, doubl
     printPerpendicularLineToLine(newX, newY, a, b, c);
 }
 
-void actionsWithTriangle(int firstChoiceNumber, int secondChoiceNumber)
+void actionsWithTriangle(char firstChoiceNumber, char secondChoiceNumber)
 {
     double x1, x2, x3, y1, y2, y3 = 0.0;
     char point1Name[MAX_SIZE] = "\0";
@@ -646,7 +646,7 @@ void actionsWithTriangle(int firstChoiceNumber, int secondChoiceNumber)
     }
 }
 
-void actionsWithTriangle2(int firstChoiceNumber, int secondChoiceNumber)
+void actionsWithTriangle2(char firstChoiceNumber, char secondChoiceNumber)
 {
     char point1Name[MAX_SIZE] = "\0";
     char point2Name[MAX_SIZE] = "\0";
@@ -699,7 +699,7 @@ void actionsWithTriangle2(int firstChoiceNumber, int secondChoiceNumber)
     }
 }
 
-void actionsWithParabolaAndPoint(int firstChoiceNumber, int secondChoiceNumber)
+void actionsWithParabolaAndPoint(char firstChoiceNumber, char secondChoiceNumber)
 {
     double x, y, a, b, c = 0.0;
     char parabolaName[MAX_SIZE] = "\0";
@@ -734,7 +734,7 @@ void actionsWithParabolaAndPoint(int firstChoiceNumber, int secondChoiceNumber)
     }
 }
 
-void actionsWithParabolaAndLine(int firstChoiceNumber, int secondChoiceNumber)
+void actionsWithParabolaAndLine(char firstChoiceNumber, char secondChoiceNumber)
 {
     double a1, b1, c1, a2, b2, c2 = 0.0;
     char parabolaName[MAX_SIZE] = "\0";
@@ -760,7 +760,7 @@ void actionsWithParabolaAndLine(int firstChoiceNumber, int secondChoiceNumber)
     }
 }
 
-void actionsWithFourLines(int firstChoiceNumber, int secondChoiceNumber)
+void actionsWithFourLines(char firstChoiceNumber, char secondChoiceNumber)
 {
     double a1, b1, c1, a2, b2, c2 = 0.0;
     double a3, b3, c3, a4, b4, c4 = 0.0;
@@ -805,23 +805,23 @@ void actionsWithFourLines(int firstChoiceNumber, int secondChoiceNumber)
 void printOptions()
 {
     std::cout << std::endl;
-    std::cout << "Please, choose one of these options by entering one of the numbers 3 - 10." << std::endl;
-    std::cout << "3. Check if a point lies on a line." << std::endl;
-    std::cout << "4. With a given line q and a point p, output an equatation of a line, parallel to q and p lies on it." << std::endl;
-    std::cout << "5. With a give line q and a point p, lying on it, output an equatation of a line perpendicular to q with a heel in p." << std::endl;
-    std::cout << "6. With two given lines, find their common point if it exists." << std::endl;
-    std::cout << "7. Triangle (set with three points) find the equatations of its heights, medians and bisectors." << std::endl;
-    std::cout << "8. Triangle (set with three points) find the equatations of its heights." << std::endl;
-    std::cout << "9. Triangle (set with three points) find the equatations of its medians." << std::endl;
-    std::cout << "10. Triangle (set with three points) find the equatations of its bisectors." << std::endl;
-    std::cout << "11. With a given equatation of a parabola and a point, ";
+    std::cout << "Please, choose one of these options by entering one of the letters a - k." << std::endl;
+    std::cout << "a. Check if a point lies on a line." << std::endl;
+    std::cout << "b. With a given line q and a point p, output an equatation of a line, parallel to q and p lies on it." << std::endl;
+    std::cout << "c. With a give line q and a point p, lying on it, output an equatation of a line perpendicular to q with a heel in p." << std::endl;
+    std::cout << "d. With two given lines, find their common point if it exists." << std::endl;
+    std::cout << "e. Triangle (set with three points) find the equatations of its heights, medians and bisectors." << std::endl;
+    std::cout << "f. Triangle (set with three points) find the equatations of its heights." << std::endl;
+    std::cout << "g. Triangle (set with three points) find the equatations of its medians." << std::endl;
+    std::cout << "h. Triangle (set with three points) find the equatations of its bisectors." << std::endl;
+    std::cout << "i. With a given equatation of a parabola and a point, ";
     std::cout << "find the equatation of the tangent towards the parabola in the given point.";
     std::cout << std::endl;
-    std::cout << "12. With given equatations of a parabola and a line, find their common points." << std::endl;
-    std::cout << "13. With given equatations of four lines, find the type of quadrilateral they form." << std::endl;
+    std::cout << "j. With given equatations of a parabola and a line, find their common points." << std::endl;
+    std::cout << "k. With given equatations of four lines, find the type of quadrilateral they form." << std::endl;
 }
 
-void printResults(int firstChoiceNumber, int secondChoiceNumber)
+void printResults(char firstChoiceNumber, char secondChoiceNumber)
 {
     switch (secondChoiceNumber)
     {
@@ -853,19 +853,20 @@ void printResults(int firstChoiceNumber, int secondChoiceNumber)
     }
 }
 
-void printOutput(int firstChoiceNumber, int secondChoiceNumber, char closure)
+void printOutput(char firstChoiceNumber, char secondChoiceNumber, char closure)
 {
     while (true)
     {
         printOptions();
         std::cin >> secondChoiceNumber;
 
-        while (THIRTEENTH_CHOICE - secondChoiceNumber < MIN_DIFFERENCE || THIRTEENTH_CHOICE - secondChoiceNumber > TENTH_CHOICE)
+        while (secondChoiceNumber < THIRD_CHOICE || secondChoiceNumber > THIRTEENTH_CHOICE)
         {
-            std::cout << "Please, enter one of the numbers from 3 to 13." << std::endl;
+            std::cin.ignore();
+            std::cout << "Please, enter one of the letters from a to k." << std::endl;
             std::cin >> secondChoiceNumber;
         }
-
+        std::cin.ignore();
         printResults(firstChoiceNumber, secondChoiceNumber);
         std::cout << std::endl;
         std::cout << "If you want to close the app press 'C'." << std::endl;
@@ -884,27 +885,30 @@ void printOutput(int firstChoiceNumber, int secondChoiceNumber, char closure)
     }
 }
 
-void checkFirstChoiceNumber(int firstChoiceNumber)
+void checkFirstChoiceNumber(char firstChoiceNumber)
 {
     while (firstChoiceNumber != FIRST_CHOICE && firstChoiceNumber != SECOND_CHOICE)
     {
+        std::cin.ignore();
         std::cout << "Please, enter one of the numbers 1 or 2." << std::endl;
         std::cin >> firstChoiceNumber;
     }
+    
 }
 
 int main()
 {
-    int firstChoiceNumber = 0;
+    char firstChoiceNumber = ' ';
     std::cout << "Please, choose one of these options by entering the number 1 or 2:" << std::endl;
     std::cout << "1. Input lines with their coefficients and points with their coordinates." << std::endl;
     std::cout << "2. Input lines with their coefficients and name, and points with their coordinates and name." << std::endl;
     
     std::cin >> firstChoiceNumber;
-
+    
     checkFirstChoiceNumber(firstChoiceNumber);
+    std::cin.ignore();
     std::cout << "This program works with lines which have the type: a*x + b*y + c = 0.";
-    int secondChoiceNumber = 0;
+    char secondChoiceNumber = ' ';
     char closure = '\0';
     
     printOutput(firstChoiceNumber, secondChoiceNumber, closure);
