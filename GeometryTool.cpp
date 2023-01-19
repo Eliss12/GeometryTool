@@ -17,12 +17,11 @@ const char TENTH_CHOICE = 'h';
 const char ELEVENTH_CHOICE = 'i';
 const char TWELFTH_CHOICE = 'j';
 const char THIRTEENTH_CHOICE = 'k';
-const int MIN_DIFFERENCE = 0;
-const int MAX_DIFFERENCE = 10;
+
 
 bool doesPointLieOnLine(double x, double y, double a, double b, double c)
 {
-    double check = a * x + b * y + c;
+    double check = a * x + b * y + c;     
     if(check > CHECK_VALUE1 && check < CHECK_VALUE2)
     {
         return true;
@@ -32,7 +31,7 @@ bool doesPointLieOnLine(double x, double y, double a, double b, double c)
 
 void printLine(double a, double b, double c)
 {
-    if (a == -1.0) {
+    if (a == -1.0) {                        // We check the coeficients of the line.
         std::cout << "-x";
     }
     else if (a == 1.0) {
@@ -57,30 +56,40 @@ void printLine(double a, double b, double c)
     else if (c < CHECK_VALUE1) { std::cout << c; }
     std::cout << "=0";
 }
+
 void printLineParallelToLineThroughPoint(double x, double y, double a, double b, double c)
 {
-    double newC = a * (-x) + b * (-y);
-    printLine(a, b, newC);
+    // We can get parallel line by the equation: x - pointX / -b = y - pointY / a
+    // In this case x and y are point coordinates(pointX and pointY), a, b and c are line coeficients.
+
+    double newC = a * (-x) + b * (-y); 
+    printLine(a, b, newC);    
 }
 
 void printPerpendicularLineToLine(double x, double y, double a, double b, double c)
 {
-    double newA = -b;
-    double newB = a;
+    // We can get perpendicular line by the equation: x - pointX / a = y - pointY / b
+    // In this case x and y are point coordinates(pointX and pointY), a, b and c are line coeficients.
+
+    double newA = -b;                 
+    double newB = a;            
     double newC = -a * y + b * x;
     printLine(newA, newB, newC);
 }
 
 void findCommonPoint(double a1, double b1, double c1, double a2, double b2, double c2, double* x, double* y)
 {
-    *y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
-    *x = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1);
+    // We get the common point's coordinates by getting x and y from the equations of the lines.
+
+    *y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1); 
+    *x = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1); 
 }
 
 void findLineThroughTwoPoints(double x1, double x2, double y1, double y2, double* a, double* b, double* c)
 {
+    
     *a = y1 - y2;
-    *b = x2 - x1;
+    *b = x2 - x1;             // We get the line by using the formula: x - x1 / x2 - x1 = y - y1 / y2 - y1
     *c = x1 * y2 - x2 * y1;
 }
 
@@ -128,15 +137,16 @@ bool pointLiesOnParabola(double x, double y, double a, double b, double c)
 
 void findTangentThroughPointOnParabola(double x, double y, double a, double b, double c)
 {
+    
     double newA = 2 * a * x + b;
     double newB = -1;
-    double newC = -a * pow(x, 2) + c;
+    double newC = -a * powNumber(x, 2) + c;  // Here we use the formula: f'(x0)(x - x0) + f(x0), x0 - coordinate of the point.
     printLine(newA, newB, newC);
 }
 
 void findTangentThroughPointNotOnParabola(double x, double y, double a, double b, double c)
 {
-    double quadraticA = - a;
+    double quadraticA = - a;        // We use the formula: y = f'(x0)(x - x0) + f(x0), x and y - point's coordinates.
     double quadraticB = 2 * a * x;
     double quadraticC = b * x + c - y;
     double discriminant = powNumber(quadraticB, 2) - 4 * quadraticA * quadraticC;
@@ -147,7 +157,7 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
     }
     else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
     {
-        double x1 = -quadraticB / 2 * quadraticA;
+        double x1 = -quadraticB / 2 * quadraticA;   // We use the formula : y = f'(x0)(x - x0) + f(x0), x0 = x1
         double newA = 2 * x1 * a + b;
         double newB = -1;
         double newC = (2 * x1 * a + b) * (- x1);
@@ -175,6 +185,8 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
 
 void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
 {
+    // We solve the system: y = a1x^2 + b1x + c1, a2x + b2y + c2
+
     double discriminant = powNumber(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
     if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }    // a1, b1, c1 - parabola a2, b2, c2 - line
     else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
@@ -206,12 +218,9 @@ bool areTwoLinesParallel(double a1, double b1, double c1, double a2, double b2, 
         return true;
     }
     newA1 = -a1 / b1;
-    newB1 = -c1 / b1;
+    newB1 = -c1 / b1;       // We make the lines in y = kx + b
     newA2 = -a2 / b2;
     newB2 = -c2 / b2;
-
-    int differenceA = compareDoubleNumbers(newA1, newA2);
-    int differenceB = compareDoubleNumbers(newB1, newB2);
 
     if (compareDoubleNumbers(newA1, newA2) == 1 && compareDoubleNumbers(newB1, newB2) == 0)
     {
@@ -267,7 +276,9 @@ bool checkLeg(double a1, double b1, double c1, double a2, double b2, double c2, 
     {
         return true;
     }
-    else { return false; }
+    else { 
+        return false; 
+    }
 }
 
 bool IsoscelesTrap(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -506,7 +517,7 @@ void actionsPointAndLine(char firstChoiceNumber, char secondChoiceNumber)
         std::cin >> x >> y;
         std::cout << "Enter the coefficients of the line: ";
         std::cin >> a >> b >> c;
-        std::cout << "The equatation of the line parallel to line " << lineName << " through point " << pointName << " is: "; 
+        std::cout << "The equation of the line parallel to line " << lineName << " through point " << pointName << " is: "; 
         printLineParallelToLineThroughPoint(x, y, a, b, c);
     }
     else if (secondChoiceNumber == FIFTH_CHOICE)
@@ -805,20 +816,21 @@ void actionsWithFourLines(char firstChoiceNumber, char secondChoiceNumber)
 void printOptions()
 {
     std::cout << std::endl;
+    std::cout << "This program works with lines which have the type: a*x + b*y + c = 0." << std::endl;
     std::cout << "Please, choose one of these options by entering one of the letters a - k." << std::endl;
     std::cout << "a. Check if a point lies on a line." << std::endl;
-    std::cout << "b. With a given line q and a point p, output an equatation of a line, parallel to q and p lies on it." << std::endl;
-    std::cout << "c. With a give line q and a point p, lying on it, output an equatation of a line perpendicular to q with a heel in p." << std::endl;
+    std::cout << "b. With a given line q and a point p, output an equation of a line, parallel to q and p lies on it." << std::endl;
+    std::cout << "c. With a give line q and a point p, lying on it, output an equation of a line perpendicular to q with a heel in p." << std::endl;
     std::cout << "d. With two given lines, find their common point if it exists." << std::endl;
-    std::cout << "e. Triangle (set with three points) find the equatations of its heights, medians and bisectors." << std::endl;
-    std::cout << "f. Triangle (set with three points) find the equatations of its heights." << std::endl;
-    std::cout << "g. Triangle (set with three points) find the equatations of its medians." << std::endl;
-    std::cout << "h. Triangle (set with three points) find the equatations of its bisectors." << std::endl;
-    std::cout << "i. With a given equatation of a parabola and a point, ";
-    std::cout << "find the equatation of the tangent towards the parabola in the given point.";
+    std::cout << "e. Triangle (set with three points) find the equations of its heights, medians and bisectors." << std::endl;
+    std::cout << "f. Triangle (set with three points) find the equations of its heights." << std::endl;
+    std::cout << "g. Triangle (set with three points) find the equations of its medians." << std::endl;
+    std::cout << "h. Triangle (set with three points) find the equations of its bisectors." << std::endl;
+    std::cout << "i. With a given equation of a parabola and a point, ";
+    std::cout << "find the equation of the tangent towards the parabola in the given point.";
     std::cout << std::endl;
-    std::cout << "j. With given equatations of a parabola and a line, find their common points." << std::endl;
-    std::cout << "k. With given equatations of four lines, find the type of quadrilateral they form." << std::endl;
+    std::cout << "j. With given equations of a parabola and a line, find their common points." << std::endl;
+    std::cout << "k. With given equations of four lines, find the type of quadrilateral they form." << std::endl;
 }
 
 void printResults(char firstChoiceNumber, char secondChoiceNumber)
@@ -862,11 +874,11 @@ void printOutput(char firstChoiceNumber, char secondChoiceNumber, char closure)
 
         while (secondChoiceNumber < THIRD_CHOICE || secondChoiceNumber > THIRTEENTH_CHOICE)
         {
-            std::cin.ignore();
             std::cout << "Please, enter one of the letters from a to k." << std::endl;
+            std::cin.ignore(MAX_SIZE, '\n');
             std::cin >> secondChoiceNumber;
         }
-        std::cin.ignore();
+        std::cin.ignore(MAX_SIZE, '\n');
         printResults(firstChoiceNumber, secondChoiceNumber);
         std::cout << std::endl;
         std::cout << "If you want to close the app press 'C'." << std::endl;
@@ -889,25 +901,29 @@ void checkFirstChoiceNumber(char firstChoiceNumber)
 {
     while (firstChoiceNumber != FIRST_CHOICE && firstChoiceNumber != SECOND_CHOICE)
     {
-        std::cin.ignore();
         std::cout << "Please, enter one of the numbers 1 or 2." << std::endl;
+        std::cin.ignore(MAX_SIZE, '\n');
         std::cin >> firstChoiceNumber;
     }
     
 }
 
-int main()
+void printFirstChoices()
 {
-    char firstChoiceNumber = ' ';
     std::cout << "Please, choose one of these options by entering the number 1 or 2:" << std::endl;
     std::cout << "1. Input lines with their coefficients and points with their coordinates." << std::endl;
     std::cout << "2. Input lines with their coefficients and name, and points with their coordinates and name." << std::endl;
-    
+}
+
+int main()
+{
+    char firstChoiceNumber = ' ';
+    printFirstChoices();
     std::cin >> firstChoiceNumber;
     
     checkFirstChoiceNumber(firstChoiceNumber);
-    std::cin.ignore();
-    std::cout << "This program works with lines which have the type: a*x + b*y + c = 0.";
+    std::cin.ignore(MAX_SIZE, '\n');
+    
     char secondChoiceNumber = ' ';
     char closure = '\0';
     
