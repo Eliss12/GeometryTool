@@ -546,7 +546,7 @@ void actionsPointAndLine(char firstChoiceNumber, char secondChoiceNumber)
             std::cout << "Yes, the point " << pointName << " lies on the line " << lineName;
         }
         else {
-            std::cout << "The point does not lie on the line.";
+            std::cout << "The point " << pointName << " does not lie on the line.";
         }
     }
     else if (secondChoiceNumber == FOURTH_CHOICE)
@@ -555,7 +555,7 @@ void actionsPointAndLine(char firstChoiceNumber, char secondChoiceNumber)
         std::cin >> x >> y;
         std::cout << "Enter the coefficients of the line: ";
         std::cin >> a >> b >> c;
-        std::cout << "The equation of the line parallel to line " << lineName << " through point " << pointName << " is: "; 
+        std::cout << "The equation of the line parallel to the line " << lineName << " through the point " << pointName << " is: "; 
         printLineParallelToLineThroughPoint(x, y, a, b, c);
     }
     else if (secondChoiceNumber == FIFTH_CHOICE)
@@ -782,12 +782,12 @@ void actionsWithParabolaAndPoint(char firstChoiceNumber, char secondChoiceNumber
         std::cin >> a >> b >> c;
         if (pointLiesOnParabola(x, y, a, b, c) == 1)
         {
-            std::cout << "The tangent through point " << pointName << " towards the parabola " << parabolaName << ":";
+            std::cout << "The tangent through the point " << pointName << " towards the parabola " << parabolaName << ":";
             findTangentThroughPointOnParabola(x, y, a, b, c);
         }
         else
         {
-            std::cout << "The tangent(s) through point " << pointName << " towards the parabola " << parabolaName << ":" << std::endl;
+            std::cout << "The tangent(s) through the point " << pointName << " towards the parabola " << parabolaName << ":" << std::endl;
             findTangentThroughPointNotOnParabola(x, y, a, b, c);
         }
     }
