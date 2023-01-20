@@ -52,7 +52,9 @@ void printLine(double a, double b, double c)
     else if (a == 1.0) {
         std::cout << "x ";
     }
-    else if (a != 0.0) { std::cout << a << "x "; }
+    else if (a != 0.0) { 
+        std::cout << a << "x "; 
+    }
 
     if (b == -1.0) {
         std::cout << "- y ";
@@ -205,9 +207,12 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
 void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
 {
     // We solve the system: y = a1x^2 + b1x + c1, a2x + b2y + c2 = 0
+    // a1, b1, c1 - parabola a2, b2, c2 - line
 
     double discriminant = powNumber(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
-    if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }    // a1, b1, c1 - parabola a2, b2, c2 - line
+    if (discriminant < CHECK_VALUE1) { 
+        std::cout << "There is no common point"; 
+    }                                                
     else if (discriminant > CHECK_VALUE1 && discriminant < CHECK_VALUE2)
     {
         double x = (-a2 - b1 * b2) / 2 * a1 * b2;
@@ -245,7 +250,9 @@ bool areTwoLinesParallel(double a1, double b1, double c1, double a2, double b2, 
     {
         return true;
     }
-    else { return false; }
+    else { 
+        return false; 
+    }
 }
 
 double findDistanceBetweenTwoPoints(double x1, double y1, double x2, double y2)
@@ -332,7 +339,9 @@ void checkTrap(double a1, double b1, double c1, double a2, double b2, double c2,
         {
             std::cout << "Trapezoid";
         }
-        else { std::cout << "Not a quadrilateral"; }
+        else { 
+            std::cout << "Not a quadrilateral"; 
+        }
     }
 }
 
@@ -373,7 +382,9 @@ bool doTwoLinesMatch(double a1, double b1, double c1, double a2, double b2, doub
     {
         return true;
     }
-    else { return false; }
+    else { 
+        return false; 
+    }
 }
 
 bool commonPointThreeLines(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -392,9 +403,13 @@ bool commonPointThreeLines(double a1, double b1, double c1, double a2, double b2
         {
             return true;
         }
-        else { return false; }
+        else { 
+            return false; 
+        }
     }
-    else { return false; }
+    else { 
+        return false; 
+    }
 }
 
 void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, double a3, double b3, double c3, double a4, double b4, double c4)
@@ -446,7 +461,9 @@ void checkFig(double a1, double b1, double c1, double a2, double b2, double c2, 
             if (fifthCheck == 1) {
                 checkFig2(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);
             }
-            else {checkTrap(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);}
+            else {
+                checkTrap(a1, b1, c1, a3, b3, c3, a2, b2, c2, a4, b4, c4);
+            }
         }
         else if (thirdCheck == 1)
         {
