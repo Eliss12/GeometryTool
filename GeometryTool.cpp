@@ -1,3 +1,18 @@
+/**
+*
+* Solution to course project # 3
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2022/2023
+*
+* @author Elis Shukri
+* @idnumber 8MI0600194
+* @compiler VC
+*
+* <main functionality>
+*
+*/
+
 #include <iostream>
 #include <cmath>
 
@@ -32,29 +47,33 @@ bool doesPointLieOnLine(double x, double y, double a, double b, double c)
 void printLine(double a, double b, double c)
 {
     if (a == -1.0) {                        // We check the coeficients of the line.
-        std::cout << "-x";
+        std::cout << "-x ";
     }
     else if (a == 1.0) {
-        std::cout << "x";
+        std::cout << "x ";
     }
-    else if (a != 0.0) { std::cout << a << "x"; }
+    else if (a != 0.0) { std::cout << a << "x "; }
 
     if (b == -1.0) {
-        std::cout << "-y";
+        std::cout << "- y ";
     }
     else if (b == 1.0) {
-        std::cout << "+y";
+        std::cout << "+ y ";
     }
     else if (b > CHECK_VALUE2 && b != 1.0) {
-        std::cout << "+" << b << "y";
+        std::cout << "+ " << b << "y ";
     }
-    else if (b < CHECK_VALUE1) { std::cout << b << "y"; }
+    else if (b < CHECK_VALUE1) { 
+        std::cout << "- " << -b << "y ";
+    }
 
     if (c > CHECK_VALUE2) {
-        std::cout << "+" << c;
+        std::cout << "+ " << c;
     }
-    else if (c < CHECK_VALUE1) { std::cout << c; }
-    std::cout << "=0";
+    else if (c < CHECK_VALUE1) { 
+        std::cout << "- " << -c;
+    }
+    std::cout << " = 0";
 }
 
 void printLineParallelToLineThroughPoint(double x, double y, double a, double b, double c)
@@ -185,7 +204,7 @@ void findTangentThroughPointNotOnParabola(double x, double y, double a, double b
 
 void findCommonPointsOfLineAndParabola(double a1, double b1, double c1, double a2, double b2, double c2)
 {
-    // We solve the system: y = a1x^2 + b1x + c1, a2x + b2y + c2
+    // We solve the system: y = a1x^2 + b1x + c1, a2x + b2y + c2 = 0
 
     double discriminant = powNumber(a2 + b1 * b2, 2) - 4 * a1 * b2 * (b2 * c1 + c2);
     if (discriminant < CHECK_VALUE1) { std::cout << "There is no common point"; }    // a1, b1, c1 - parabola a2, b2, c2 - line
@@ -475,7 +494,7 @@ void checkName(char* name)
 {
     while (isValidName(name) == 0)
     {
-        std::cout << "Please, enter a name that includes latin letters, arabic numbers or '_'.";
+        std::cout << "Please, enter a name that includes Latin letters, Arabic numbers or '_'." << std::endl;
         std::cin >> name;
     }
     
@@ -490,12 +509,14 @@ void actionsPointAndLine(char firstChoiceNumber, char secondChoiceNumber)
 
     if (firstChoiceNumber == SECOND_CHOICE)
     {
-        std::cout << "Enter the name of the point:";
+        std::cout << "Enter the name of the point: ";
         std::cin >> pointName;
         checkName(pointName);
-        std::cout << "Enter the name of the line:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the line: ";
         std::cin >> lineName;
         checkName(lineName);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
 
     if (secondChoiceNumber == THIRD_CHOICE)
@@ -528,12 +549,12 @@ void actionsPointAndLine(char firstChoiceNumber, char secondChoiceNumber)
         std::cin >> a >> b >> c;
 
         if (doesPointLieOnLine(x, y, a, b, c) == 1) {
-            std::cout << "The equatation of the line perpendicular to line " << lineName << " through point " << pointName << " is: ";
+            std::cout << "The equation of the line perpendicular to line " << lineName << " through point " << pointName << " is: ";
             printPerpendicularLineToLine(x, y, a, b, c);
         }
         else {
             std::cout << "The point is not on the line." << std::endl;
-            std::cout << "But the equation of the line perpendicular to line " << lineName << " through your point " << pointName << "is : " << std::endl;
+            std::cout << "But the equation of the line perpendicular to line " << lineName << " through your point " << pointName << " is: " << std::endl;
             printPerpendicularLineToLine(x, y, a, b, c);
         }
     }
@@ -549,12 +570,14 @@ void actionsTwoLines(char firstChoiceNumber, char secondChoiceNumber)
 
     if (firstChoiceNumber == SECOND_CHOICE)
     {
-        std::cout << "Enter the name of the first line:";
+        std::cout << "Enter the name of the first line: ";
         std::cin >> line1Name;
         checkName(line1Name);
-        std::cout << "Enter the name of the second line:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the second line: ";
         std::cin >> line2Name;
         checkName(line2Name);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
     if (secondChoiceNumber == SIXTH_CHOICE)
     {
@@ -571,11 +594,11 @@ void actionsTwoLines(char firstChoiceNumber, char secondChoiceNumber)
         }
         else if (areTwoLinesParallel(a1, b1, c1, a2, b2, c2) == 1)
         {
-            std::cout << "The two lines " << line1Name << " " << line2Name << " are parallel";
+            std::cout << "The two lines " << line1Name << " " << line2Name << " are parallel.";
         }
         else if (doTwoLinesMatch(a1, b1, c1, a2, b2, c2) == 1)
         {
-            std::cout << "The two lines " << line1Name << " " << line2Name << " match";
+            std::cout << "The two lines " << line1Name << " " << line2Name << " match.";
         }
     }
 }
@@ -612,15 +635,18 @@ void actionsWithTriangle(char firstChoiceNumber, char secondChoiceNumber)
 
     if (firstChoiceNumber == SECOND_CHOICE)
     {
-        std::cout << "Enter the name of the first point:";
+        std::cout << "Enter the name of the first point: ";
         std::cin >> point1Name;
         checkName(point1Name);
-        std::cout << "Enter the name of the second point:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the second point: ";
         std::cin >> point2Name;
         checkName(point2Name);
-        std::cout << "Enter the name of the third point:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the third point: ";
         std::cin >> point3Name;
         checkName(point3Name);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
 
     if (secondChoiceNumber == SEVENTH_CHOICE)
@@ -647,11 +673,11 @@ void actionsWithTriangle(char firstChoiceNumber, char secondChoiceNumber)
         std::cout << std::endl << "The median through the third point " << point3Name << " is: ";
         printMedians(x1, y1, x2, y2, x3, y3);
 
-        std::cout << std::endl << "The bisector through the first point " << point1Name << " is: ";
+        std::cout << std::endl << "The bisector to the first side " << point2Name << point3Name << " is: ";
         printBisectors(x2, y2, x3, y3, x1, y1);
-        std::cout << std::endl << "The bisector through the second point " << point2Name << " is: ";
+        std::cout << std::endl << "The bisector to the second side " << point1Name << point3Name << " is: ";
         printBisectors(x1, y1, x3, y3, x2, y2);
-        std::cout << std::endl << "The bisector through the third point " << point3Name << " is: ";
+        std::cout << std::endl << "The bisector to the third side " << point1Name << point2Name << " is: ";
         printBisectors(x1, y1, x2, y2, x3, y3);
         
     }
@@ -671,15 +697,18 @@ void actionsWithTriangle2(char firstChoiceNumber, char secondChoiceNumber)
     std::cin >> x3 >> y3;
 
     if (firstChoiceNumber == SECOND_CHOICE) {
-        std::cout << "Enter the name of the first point:";
+        std::cout << "Enter the name of the first point: ";
         std::cin >> point1Name;
         checkName(point1Name);
-        std::cout << "Enter the name of the second point:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the second point: ";
         std::cin >> point2Name;
         checkName(point1Name);
-        std::cout << "Enter the name of the third point:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the third point: ";
         std::cin >> point3Name;
         checkName(point3Name);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
 
     if (secondChoiceNumber == EIGHTH_CHOICE) {
@@ -701,11 +730,11 @@ void actionsWithTriangle2(char firstChoiceNumber, char secondChoiceNumber)
     }
     else if (secondChoiceNumber == TENTH_CHOICE) {
 
-        std::cout << "The bisector through the first point " << point1Name << " is: ";
+        std::cout << "The bisector to the first side " << point2Name << point3Name << " is: ";
         printBisectors(x2, y2, x3, y3, x1, y1);
-        std::cout << std::endl << "The bisector through the second point " << point2Name << " is: ";
+        std::cout << std::endl << "The bisector to the second side " << point1Name << point3Name << " is: ";
         printBisectors(x1, y1, x3, y3, x2, y2);
-        std::cout << std::endl << "The bisector through the third point " << point3Name << " is: ";
+        std::cout << std::endl << "The bisector to the third side " << point1Name << point2Name << " is: ";
         printBisectors(x1, y1, x2, y2, x3, y3);
     }
 }
@@ -718,12 +747,14 @@ void actionsWithParabolaAndPoint(char firstChoiceNumber, char secondChoiceNumber
 
     if (firstChoiceNumber == SECOND_CHOICE)
     {
-        std::cout << "Enter the name of the point:";
+        std::cout << "Enter the name of the point: ";
         std::cin >> pointName;
         checkName(pointName);
-        std::cout << "Enter the name of the parabola:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the parabola: ";
         std::cin >> parabolaName;
         checkName(parabolaName);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
 
     if (secondChoiceNumber == ELEVENTH_CHOICE)
@@ -734,12 +765,12 @@ void actionsWithParabolaAndPoint(char firstChoiceNumber, char secondChoiceNumber
         std::cin >> a >> b >> c;
         if (pointLiesOnParabola(x, y, a, b, c) == 1)
         {
-            std::cout << "The tangent through point " << pointName << " toward the parabola " << parabolaName << ":";
+            std::cout << "The tangent through point " << pointName << " towards the parabola " << parabolaName << ":";
             findTangentThroughPointOnParabola(x, y, a, b, c);
         }
         else
         {
-            std::cout << "The tangent(s) through point " << pointName << " toward the parabola " << parabolaName << ":" << std::endl;
+            std::cout << "The tangent(s) through point " << pointName << " towards the parabola " << parabolaName << ":" << std::endl;
             findTangentThroughPointNotOnParabola(x, y, a, b, c);
         }
     }
@@ -752,19 +783,21 @@ void actionsWithParabolaAndLine(char firstChoiceNumber, char secondChoiceNumber)
     char lineName[MAX_SIZE] = "\0";
     if (firstChoiceNumber == SECOND_CHOICE)
     {
-        std::cout << "Enter the name of the parabola:";
+        std::cout << "Enter the name of the parabola: ";
         std::cin >> parabolaName;
         checkName(parabolaName);
-        std::cout << "Enter the name of the line:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the line: ";
         std::cin >> lineName;
         checkName(lineName);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
 
     if (secondChoiceNumber == TWELFTH_CHOICE)
     {
-        std::cout << "Enter the coeficients of the parabola:";
+        std::cout << "Enter the coeficients of the parabola: ";
         std::cin >> a1 >> b1 >> c1;
-        std::cout << "Enter the coeficients of the line:";
+        std::cout << "Enter the coeficients of the line: ";
         std::cin >> a2 >> b2 >> c2;
         std::cout << "The common point(s) of the parabola " << parabolaName << " and the line " << lineName << ":";
         findCommonPointsOfLineAndParabola(a1, b1, c1, a2, b2, c2);
@@ -782,18 +815,22 @@ void actionsWithFourLines(char firstChoiceNumber, char secondChoiceNumber)
 
     if (firstChoiceNumber == SECOND_CHOICE)
     {
-        std::cout << "Enter the name of the first line:";
+        std::cout << "Enter the name of the first line: ";
         std::cin >> line1Name;
         checkName(line1Name);
-        std::cout << "Enter the name of the second line:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the second line: ";
         std::cin >> line2Name;
         checkName(line2Name);
-        std::cout << "Enter the name of the third line:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the third line: ";
         std::cin >> line3Name;
         checkName(line3Name);
-        std::cout << "Enter the name of the fourth line:";
+        std::cin.ignore(MAX_SIZE, '\n');
+        std::cout << "Enter the name of the fourth line: ";
         std::cin >> line4Name;
         checkName(line4Name);
+        std::cin.ignore(MAX_SIZE, '\n');
     }
 
     if (secondChoiceNumber == THIRTEENTH_CHOICE)
@@ -807,7 +844,7 @@ void actionsWithFourLines(char firstChoiceNumber, char secondChoiceNumber)
         std::cout << "Enter the coeficients of the fourth line: " << std::endl;
         std::cin >> a4 >> b4 >> c4;
 
-        std::cout << "The type of quadrilateral which the first line " << line1Name << ", the second line "
+        std::cout << "The type of quadrilateral which is formed from the first line " << line1Name << ", the second line "
             << line2Name << ", the third line " << line3Name << ", the fourth line " << line4Name << " : ";
         checkFig(a1, b1, c1, a2, b2, c2, a3, b3, c3, a4, b4, c4);
     }
@@ -817,15 +854,16 @@ void printOptions()
 {
     std::cout << std::endl;
     std::cout << "This program works with lines which have the type: a*x + b*y + c = 0." << std::endl;
+    std::cout << "This program works with parabolas which have the type: y = a*x^2 + b*x + c." << std::endl;
     std::cout << "Please, choose one of these options by entering one of the letters a - k." << std::endl;
     std::cout << "a. Check if a point lies on a line." << std::endl;
     std::cout << "b. With a given line q and a point p, output an equation of a line, parallel to q and p lies on it." << std::endl;
     std::cout << "c. With a give line q and a point p, lying on it, output an equation of a line perpendicular to q with a heel in p." << std::endl;
     std::cout << "d. With two given lines, find their common point if it exists." << std::endl;
-    std::cout << "e. Triangle (set with three points) find the equations of its heights, medians and bisectors." << std::endl;
-    std::cout << "f. Triangle (set with three points) find the equations of its heights." << std::endl;
-    std::cout << "g. Triangle (set with three points) find the equations of its medians." << std::endl;
-    std::cout << "h. Triangle (set with three points) find the equations of its bisectors." << std::endl;
+    std::cout << "e. Triangle(set with three points) find the equations of its heights, medians and bisectors." << std::endl;
+    std::cout << "f. Triangle(set with three points) find the equations of its heights." << std::endl;
+    std::cout << "g. Triangle(set with three points) find the equations of its medians." << std::endl;
+    std::cout << "h. Triangle(set with three points) find the equations of its bisectors." << std::endl;
     std::cout << "i. With a given equation of a parabola and a point, ";
     std::cout << "find the equation of the tangent towards the parabola in the given point.";
     std::cout << std::endl;
@@ -891,6 +929,7 @@ void printOutput(char firstChoiceNumber, char secondChoiceNumber, char closure)
         }
         else
         {
+            std::cin.ignore(MAX_SIZE, '\n');
             system("cls");
         }
         
@@ -912,7 +951,7 @@ void printFirstChoices()
 {
     std::cout << "Please, choose one of these options by entering the number 1 or 2:" << std::endl;
     std::cout << "1. Input lines with their coefficients and points with their coordinates." << std::endl;
-    std::cout << "2. Input lines with their coefficients and name, and points with their coordinates and name." << std::endl;
+    std::cout << "2. Input lines with their coefficients and names, and points with their coordinates and names." << std::endl;
 }
 
 int main()
@@ -928,5 +967,4 @@ int main()
     char closure = '\0';
     
     printOutput(firstChoiceNumber, secondChoiceNumber, closure);
-    
 }
